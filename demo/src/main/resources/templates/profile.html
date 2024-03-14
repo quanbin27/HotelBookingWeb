@@ -1,0 +1,475 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Montana</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link rel="manifest" href="site.webmanifest"> -->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{img/favicon.png}" >
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS here -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/css/nice-select.css}">
+    <link rel="stylesheet" th:href="@{/css/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/css/gijgo.css}">
+    <link rel="stylesheet" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" th:href="@{/css/slicknav.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+    <!-- header-start -->
+    <header>
+        <div class="header-area ">
+            <div id="sticky-header" class="main-header-area">
+                <div class="container-fluid p-0">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col-xl-5 col-lg-6">
+                            <div class="main-menu  d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation">
+                                        <li><a href="/home">home</a></li>
+                                        <li><a href="/rooms">rooms</a></li>
+                                        <li><a class="active" href="/about">About</a></li>
+                                        <li><a href="/contact">Contact</a></li>
+                                        <div class="nav-links" style="text-align: center;">
+                                            <li>
+                                                <a href="#" class="desktop-item" >Menu</a>
+                                                <ul class="drop-menu" style="left: 2%;font-size: 6px;color: #f2f2f2;">
+
+                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Hồ Sơ</a>
+                                                        <a th:if="${isLoggedIn == true}" th:href="@{/#}">Hồ Sơ</a></li>
+                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Phiếu Đặt</a>
+                                                        <a th:if="${isLoggedIn == true}" th:href="@{/#}">Phiếu Đặt</a></li>
+                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>
+                                                        <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Log out</a></li>
+                                                </ul>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-2">
+                            <div class="logo-img">
+                                <a href="/home">
+                                    <img th:src="@{img/logo.png}" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xl-5 col-lg-4 d-none d-lg-block">
+
+<!--                            <div class="sign_up" style="text-align: right;">-->
+<!--                                -->
+<!--                                <div class="sign_btn d-none d-lg-block">-->
+<!--                                    <a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>-->
+<!--                                    <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Đăng xuất</a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- header-end -->
+
+    <!-- bradcam_area_start -->
+    <div class="bradcam_area breadcam_bg_1" style="padding: 145px 0 20px">
+        <h3>HỒ SƠ</h3>
+    </div>
+    <!-- bradcam_area_end -->
+    <div class="padding_top " style="background-color: white">
+        <div class="container" style="padding: 20px;background: white;max-height: 900px;margin: auto;">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12" style="">
+<!--                    <form name="signin"  method="post" style="display: flex;text-align:center;justify-content: center;align-items: center;">-->
+<!--                        <div style="display: block;padding: 45px;width: 80%;justify-content: center;">-->
+<!--                            <h3 style="margin: 0;text-transform: uppercase;font-size: 25px;text-align: center;margin-bottom: 28px;">THAY ĐỔI THÔNG TIN CÁ NHÂN</h3>-->
+<!--                            <div class="form-wrapper">-->
+<!--                                <label  class="form-label">Full Name</label>-->
+<!--                                <input name="username" type="text" placeholder="Ten dang nhap" class="form-control">-->
+<!--                                <i class="zmdi zmdi-account">*</i>-->
+<!--                            </div>-->
+
+<!--                            <div class="form-wrapper">-->
+<!--                                <input name="password" type="password" placeholder="Mat khau" class="form-control">-->
+<!--                                <i class="zmdi zmdi-lock">*</i>-->
+<!--                            </div>-->
+<!--                            <button name="submit">Login-->
+<!--                                <i class="zmdi zmdi-arrow-right"></i>-->
+<!--                            </button>-->
+<!--                            <a href="/signup" id="sign_in_link" >Chưa có tài khoản</a>-->
+<!--                        </div>-->
+
+
+
+<!--                    </form>-->
+                    <form th:object="${khachhang}">
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Full Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="fullName" th:value="*{Ho}">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label  class="col-sm-2 col-form-label">Email address</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="email" th:value="*{Email}">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label  class="col-sm-2 col-form-label">Phone Number</label>
+                            <div class="col-sm-10">
+                                <input type="tel" class="form-control" id="phoneNumber" th:value="*{SDT}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-10 offset-sm-2">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- about_area_start -->
+    <div class="about_area">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-5 col-lg-5">
+                    <div class="about_info">
+                        <div class="section_title mb-20px">
+                            <span>About Us</span>
+                            <h3>A Luxuries Hotel <br>
+                                    with Nature</h3>
+                        </div>
+                        <p>Suscipit libero pretium nullam potenti. Interdum, blandit phasellus consectetuer dolor ornare dapibus enim ut tincidunt rhoncus tellus sollicitudin pede nam maecenas, dolor sem. Neque sollicitudin enim. Dapibus lorem feugiat facilisi faucibus et. Rhoncus.</p>
+                        <a href="#" class="line-button">Learn More</a>
+                    </div>
+                </div>
+                <div class="col-xl-7 col-lg-7">
+                    <div class="about_thumb d-flex">
+                        <div class="img_1">
+                            <img src="img/about/about_1.png" alt="">
+                        </div>
+                        <div class="img_2">
+                            <img src="img/about/about_2.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- about_area_end -->
+
+    <!-- about_info_area_start -->
+    <div class="about_info_area">
+        <div class="about_active owl-carousel">
+            <div class="single_slider about_bg_1"></div>
+            <div class="single_slider about_bg_1"></div>
+            <div class="single_slider about_bg_1"></div>
+            <div class="single_slider about_bg_1"></div>
+        </div>
+    </div>
+    <!-- about_info_area_start -->
+
+    <!-- about_main_info_start -->
+    <div class="about_main_info">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-6 col-md-6">
+                    <div class="single_about_info">
+                        <h3>We Serve Fresh and <br>
+                            Delicious Food</h3>
+                            <p>Suscipit libero pretium nullam potenti. Interdum, blandit <br> phasellus consectetuer dolor ornare dapibus enim ut tincidunt <br> rhoncus tellus sollicitudin pede nam maecenas, dolor sem. <br> Neque sollicitudin enim. Dapibus lorem feugiat facilisi <br> faucibus et. Rhoncus.
+                            </p>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-md-6">
+                    <div class="single_about_info">
+                        <h3>We Serve Fresh and <br>
+                            Delicious Food</h3>
+                            <p>Suscipit libero pretium nullam potenti. Interdum, blandit <br> phasellus consectetuer dolor ornare dapibus enim ut tincidunt <br> rhoncus tellus sollicitudin pede nam maecenas, dolor sem. <br> Neque sollicitudin enim. Dapibus lorem feugiat facilisi <br> faucibus et. Rhoncus.
+                            </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- about_main_info_end -->
+
+    <!-- forQuery_start -->
+    <div class="forQuery">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 offset-xl-1 col-md-12">
+                    <div class="Query_border">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col-xl-6 col-md-6">
+                                <div class="Query_text">
+                                        <p>For Reservation 0r Query?</p>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <div class="phone_num">
+                                        <a href="#" class="mobile_no">+10 576 377 4789</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- forQuery_end-->
+
+    <!-- instragram_area_start -->
+    <div class="instragram_area">
+        <div class="single_instagram">
+            <img src="img/instragram/1.png" alt="">
+            <div class="ovrelay">
+                <a href="#">
+                    <i class="fa fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+        <div class="single_instagram">
+            <img src="img/instragram/2.png" alt="">
+            <div class="ovrelay">
+                <a href="#">
+                    <i class="fa fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+        <div class="single_instagram">
+            <img src="img/instragram/3.png" alt="">
+            <div class="ovrelay">
+                <a href="#">
+                    <i class="fa fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+        <div class="single_instagram">
+            <img src="img/instragram/4.png" alt="">
+            <div class="ovrelay">
+                <a href="#">
+                    <i class="fa fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+        <div class="single_instagram">
+            <img src="img/instragram/5.png" alt="">
+            <div class="ovrelay">
+                <a href="#">
+                    <i class="fa fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- instragram_area_end -->
+    
+    <!-- footer -->
+    <footer class="footer" >
+        <div class="footer_top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 col-lg-3">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">
+                                address
+                            </h3>
+                            <p class="footer_text" >  200, Green road, Mongla, <br>
+                                    New Yor City USA</p>
+                            <a href="#" class="line-button">Get Direction</a>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-lg-3">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">
+                                    Reservation
+                            </h3>
+                            <p class="footer_text" >+10 367 267 2678 <br>
+                                    reservation@montana.com</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-md-6 col-lg-2">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">
+                                    Navigation
+                            </h3>
+                            <ul>
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">Rooms</a></li>
+                                <li><a href="#">About</a></li>
+                                <li><a href="#">News</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-md-6 col-lg-4">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">
+                                Newsletter
+                            </h3>
+                            <form action="#" class="newsletter_form">
+                                <input type="text" placeholder="Enter your mail">
+                                <button type="submit" >Sign Up</button>
+                            </form>
+                            <p class="newsletter_text">Subscribe newsletter to get updates</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copy-right_text">
+            <div class="container">
+                <div class="footer_border"></div>
+                <div class="row">
+                    <div class="col-xl-8 col-md-7 col-lg-9">
+                        <p class="copy_right">
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </p>
+                    </div>
+                    <div class="col-xl-4 col-md-5 col-lg-3">
+                        <div class="socail_links">
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-facebook-square"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-twitter"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="fa fa-instagram"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- footer_end -->
+
+    <!-- form itself end-->
+<!--    <form id="test-form" class="white-popup-block mfp-hide">-->
+<!--        <div class="popup_box ">-->
+<!--                <div class="popup_inner">-->
+<!--                    <h3>Check Availability</h3>-->
+<!--                    <form action="#">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-xl-6">-->
+<!--                                <input id="datepicker" placeholder="Check in date">-->
+<!--                            </div>-->
+<!--                            <div class="col-xl-6">-->
+<!--                                <input id="datepicker2" placeholder="Check out date">-->
+<!--                            </div>-->
+<!--                            <div class="col-xl-6">-->
+<!--                                <select class="form-select wide" id="default-select" class="">-->
+<!--                                    <option data-display="Adult">1</option>-->
+<!--                                    <option value="1">2</option>-->
+<!--                                    <option value="2">3</option>-->
+<!--                                    <option value="3">4</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                            <div class="col-xl-6">-->
+<!--                                <select class="form-select wide" id="default-select" class="">-->
+<!--                                    <option data-display="Children">1</option>-->
+<!--                                    <option value="1">2</option>-->
+<!--                                    <option value="2">3</option>-->
+<!--                                    <option value="3">4</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                            <div class="col-xl-12">-->
+<!--                                <select class="form-select wide" id="default-select" class="">-->
+<!--                                    <option data-display="Room type">Room type</option>-->
+<!--                                    <option value="1">Laxaries Rooms</option>-->
+<!--                                    <option value="2">Deluxe Room</option>-->
+<!--                                    <option value="3">Signature Room</option>-->
+<!--                                    <option value="4">Couple Room</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                            <div class="col-xl-12">-->
+<!--                                <button type="submit" class="boxed-btn3">Check Availability</button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--    </form>-->
+<!-- form itself end -->
+
+
+    <!-- JS here -->
+    <script th:src="@{js/vendor/modernizr-3.5.0.min.js}"></script>
+    <script th:src="@{js/vendor/jquery-1.12.4.min.js}"></script>
+    <script th:src="@{js/popper.min.js}"></script>
+    <script th:src="@{js/bootstrap.min.js}"></script>
+    <script th:src="@{js/owl.carousel.min.js}"></script>
+    <script th:src="@{js/isotope.pkgd.min.js}"></script>
+    <script th:src="@{js/ajax-form.js}"></script>
+    <script th:src="@{js/waypoints.min.js}"></script>
+    <script th:src="@{js/jquery.counterup.min.js}"></script>
+    <script th:src="@{js/imagesloaded.pkgd.min.js}"></script>
+    <script th:src="@{js/scrollIt.js}"></script>
+    <script th:src="@{js/jquery.scrollUp.min.js}"></script>
+    <script th:src="@{js/wow.min.js}"></script>
+    <script th:src="@{js/jquery.slicknav.min.js}"></script>
+    <script th:src="@{js/jquery.magnific-popup.min.js}"></script>
+    <script th:src="@{js/plugins.js}"></script>
+    <script th:src="@{js/gijgo.min.js}"></script>
+
+    <!--contact js-->
+    <script th:src="@{js/contact.js}"></script>
+    <script th:src="@{js/jquery.ajaxchimp.min.js}"></script>
+    <script th:src="@{js/jquery.form.js}"></script>
+    <script th:src="@{js/jquery.validate.min.js}"></script>
+    <script th:src="@{js/mail-script.js}"></script>
+
+    <script th:src="@{js/main.js}"></script>
+    <script>
+        $('#datepicker').datepicker({
+            iconsLibrary: 'fontawesome',
+            icons: {
+             rightIcon: '<span class="fa fa-caret-down"></span>'
+         }
+        });
+        $('#datepicker2').datepicker({
+            iconsLibrary: 'fontawesome',
+            icons: {
+             rightIcon: '<span class="fa fa-caret-down"></span>'
+         }
+
+        });
+    </script>
+
+
+</body>
+
+</html>
