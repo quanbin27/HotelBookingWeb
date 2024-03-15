@@ -103,9 +103,7 @@ public class PhieuDatController {
     public String returnHome(@Valid TaiKhoanKhachHangDTO taiKhoanKhachHangDTO, BindingResult bindingResult){
         taiKhoanKhachHangDTO.setEncrytedPassword(encrytePassword(taiKhoanKhachHangDTO.getEncrytedPassword()));
         System.out.println(taiKhoanKhachHangDTO.toString());
-        System.out.println("toi day ne 1");
         if (userDetailsService.userExists(taiKhoanKhachHangDTO.getUsername())) {
-            System.out.println("co loi ");
             bindingResult.addError(new FieldError("taiKhoanKhachHangDTO","Username","Username already in use"));
         }
         if (bindingResult.hasErrors()){
@@ -137,5 +135,11 @@ public class PhieuDatController {
             model.addAttribute("khachhang",khachHang);
         }
         return "profile";
+    }
+    @PostMapping("/profile")
+    public String updateProfile(@ModelAttribute("khachhang") KhachHang khachHang) {
+        System.out.println(khachHang.getHo());
+        khachhangRepository.merge(khachHang);
+        return "redirect:/profile";
     }
 }

@@ -19,6 +19,7 @@ public class KhachHangRepository  {
     public void save(KhachHang khachHang){
         entityManager.persist(khachHang);
     }
+    public void merge(KhachHang khachHang ){ entityManager.merge(khachHang);}
     public KhachHang findByCCCD(String CCCD) {
         try {
             String sql = "SELECT k FROM "+KhachHang.class.getName() +" k WHERE k.CCCD = :CCCD";
