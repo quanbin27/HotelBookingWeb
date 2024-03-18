@@ -26,6 +26,8 @@ public class TaiKhoan implements Serializable {
     private KhachHang khachHang;
     @Column(name = "Enabled",length = 1,nullable = false)
     private boolean Enabled;
+    @Column(name = "reset_password_token")
+    private String ResetPasswordToken;
 
     public TaiKhoan(String username, String encrytedPassword, String cccd, Boolean enabled) {
         this.Username = username;

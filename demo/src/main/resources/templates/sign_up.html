@@ -52,9 +52,9 @@
                                                 <ul class="drop-menu" style="left: 2%;font-size: 6px;color: #f2f2f2;">
 
                                                     <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Hồ Sơ</a>
-                                                    <a th:if="${isLoggedIn == true}" th:href="@{/#}">Hồ Sơ</a></li>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/profile}">Hồ Sơ</a></li>
                                                     <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Phiếu Đặt</a>
-                                                    <a th:if="${isLoggedIn == true}" th:href="@{/#}">Phiếu Đặt</a></li>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/phieudat}">Phiếu Đặt</a></li>
                                                     <li><a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>
                                                     <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Log out</a></li>
                                                 </ul>

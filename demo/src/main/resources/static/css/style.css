@@ -4737,7 +4737,7 @@ font-size:12px
   height: 30px;
   padding: 0;
   margin-bottom: 10px; }
-#sign_in_link{
+#sign_in_link,#forgot_pass_link{
   text-decoration: none;
   box-shadow: 0 3px black;
   padding: 4px;

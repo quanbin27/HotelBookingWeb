@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -97,5 +99,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         System.out.println("here3" );
 
         System.out.println("da save");
+    }
+    public void updateResetPasswordToken(String token, String username) throws UsernameNotFoundException{
+        TaiKhoan taiKhoan = taiKhoanRepository.findUserAccount(username);
+        System.out.println(taiKhoan.getKhachHang().getEmail());
+        if (taiKhoan != null) {
+            taiKhoan.setResetPasswordToken(token);
+            taiKhoanRepository.merge(taiKhoan);
+        } else {
+            throw new UsernameNotFoundException("Could not find any customer with the username " + username);
+        }
+    }
+    public TaiKhoan getByResetPasswordToken(String token) {
+        return taiKhoanRepository.findByResetPasswordToken(token);
+    }
+    public void updatePassword(TaiKhoan taiKhoan,String newPassword){
+        PasswordEncoder passwordEncoder= PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        taiKhoan.setEncrytedPassword(passwordEncoder.encode(newPassword));
+        taiKhoan.setResetPasswordToken(null);
+        taiKhoanRepository.merge(taiKhoan);
     }
 }

@@ -24,12 +24,26 @@ public class TaiKhoanRepository {
             return null;
         }
     }
+    public TaiKhoan findByResetPasswordToken(String token){
+        try {
+            String sql = "SELECT e FROM " + TaiKhoan.class.getName() + " e WHERE e.ResetPasswordToken = :token";
+            Query query=entityManager.createQuery(sql, TaiKhoan.class);
+            query.setParameter("token",token);
+            return (TaiKhoan) query.getSingleResult();
+        }catch (NoResultException e){
+            return null;
+        }
+    }
     public boolean existsByUsername(String username) {
         Query query = entityManager.createQuery("SELECT 1 FROM TaiKhoan t WHERE t.Username = :username");
         query.setParameter("username", username);
         return query.getResultList().size() > 0;
     }
+
     public void save(TaiKhoan taiKhoan){
         entityManager.persist(taiKhoan);
+    }
+    public void merge(TaiKhoan taiKhoan){
+        entityManager.merge(taiKhoan);
     }
 }
