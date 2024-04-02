@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Table(name = "ChiTietPhietDat",uniqueConstraints = {@UniqueConstraint(columnNames = {"MAPD","MAHP"})})
 public class ChiTietPhieuDat implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long IdPD;
     private int SoLuong;
     @ManyToOne

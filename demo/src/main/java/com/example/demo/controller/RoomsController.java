@@ -40,6 +40,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -71,12 +72,7 @@ public class RoomsController {
     public String rooms(Model model){
         List<KieuPhong> kieuphongs=kieuPhongService.findAll();
         List<KieuPhongDTO> kieuphongDTOs = new ArrayList<>();
-        for (KieuPhong kieuPhong:kieuphongs){
-            KieuPhongDTO kieuPhongDTO=new KieuPhongDTO();
-            kieuPhongDTO.loadFromEntity(kieuPhong);
-            kieuphongDTOs.add(kieuPhongDTO);
-        }
-        model.addAttribute("listkieuphong",kieuphongDTOs);
+        model.addAttribute("listkieuphong",kieuphongs);
         return "rooms";
     }
 

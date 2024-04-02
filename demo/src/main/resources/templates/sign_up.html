@@ -46,21 +46,7 @@
                                         <li><a href="/rooms">rooms</a></li>
                                         <li><a href="/about">About</a></li>
                                         <li><a href="/contact">Contact</a></li>
-                                        <div class="nav-links" style="text-align: center;">
-                                            <li>
-                                                <a href="#" class="desktop-item" >Menu</a>
-                                                <ul class="drop-menu" style="left: 2%;font-size: 6px;color: #f2f2f2;">
-
-                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Hồ Sơ</a>
-                                                    <a th:if="${isLoggedIn == true}" th:href="@{/profile}">Hồ Sơ</a></li>
-                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Phiếu Đặt</a>
-                                                    <a th:if="${isLoggedIn == true}" th:href="@{/phieudat}">Phiếu Đặt</a></li>
-                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>
-                                                    <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Log out</a></li>
-                                                </ul>
-
-                                            </li>
-                                        </div>
+                                        <li><a href="/signin">Sign in</a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -99,7 +85,7 @@
             <div class="row">
                 <div class="col-xl-12 col-lg-12" style="">
                     <form method="post" th:action="@{/signup}" th:object="${taiKhoanKhachHangDTO}" style="display: flex;">
-                        <div style="width: 50%;display: block;padding: 45px;">
+                        <div style="width: 50%;display: block;padding: 2%;">
                             <h3 style="margin: 0;text-transform: uppercase;font-size: 25px;text-align: center;margin-bottom: 28px;">Registration Form</h3>
                             <div class="form-group" style="margin-bottom: 0px;">
                                 <input type="text" placeholder="Ho" class="form-control" name="Ho" th:value="*{Ho} " th:errorClass="is-invalid" >
@@ -141,7 +127,7 @@
                             </button>
                             <a href="/signin" id="sign_in_link" >Đã có tài khoản</a>
                         </div>
-                        <div style="width: 50%;display: block;padding: 40px;">
+                        <div style="width: 50%;display: block;padding: 2%;">
 
                             <div class="form-wrapper" style="padding-top: 58px;">
                                 <input type="text" placeholder="CCCD" class="form-control" name="CCCD" th:value="*{CCCD}" th:errorClass="is-invalid">

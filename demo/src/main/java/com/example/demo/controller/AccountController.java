@@ -48,13 +48,6 @@ public class AccountController {
     public AccountController(UserDetailsServiceImpl userDetailsService){
         this.userDetailsService=userDetailsService;
     }
-    
-    @ModelAttribute("isLoggedIn")
-    public boolean isLoggedIn() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.isAuthenticated());
-        return authentication != null  && !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
-    }
     @RequestMapping("signin")
     public String login(Model model){
         return "sign_in";
@@ -77,16 +70,18 @@ public class AccountController {
     private static final Logger log = LoggerFactory.getLogger(RoomsController.class);
     @PostMapping("signup")
     public String returnHome(@Valid TaiKhoanKhachHangDTO taiKhoanKhachHangDTO, BindingResult bindingResult){
-        taiKhoanKhachHangDTO.setEncrytedPassword(encrytePassword(taiKhoanKhachHangDTO.getEncrytedPassword()));
         System.out.println(taiKhoanKhachHangDTO.toString());
         if (userDetailsService.userExists(taiKhoanKhachHangDTO.getUsername())) {
             bindingResult.addError(new FieldError("taiKhoanKhachHangDTO","Username","Username already in use"));
         }
         if (bindingResult.hasErrors()){
+            System.out.println("co loi");
             System.out.println("co loi"+bindingResult.toString());
             return "sign_up";
         }
+        System.out.println("ko loi");
         log.info("----UserDTO:",taiKhoanKhachHangDTO.toString());
+        taiKhoanKhachHangDTO.setEncrytedPassword(encrytePassword(taiKhoanKhachHangDTO.getEncrytedPassword()));
         userDetailsService.register(taiKhoanKhachHangDTO);
         return "redirect:signin";
 

@@ -38,7 +38,5 @@ public class MainController {
     public String about(){
         return "about";
     }
-    @RequestMapping("booking")
-    public  String booking(){return "booking";}
 
 }

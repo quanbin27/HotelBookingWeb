@@ -14,7 +14,6 @@ import java.io.Serializable;
 public class Phong implements Serializable {
     @Id
     private String Maphong;
-    private int SoPhong;
     private int SoTang;
     private  String TrangThai;
     @ManyToOne

@@ -46,20 +46,7 @@
                                         <li><a href="/rooms">rooms</a></li>
                                         <li><a href="/about">About</a></li>
                                         <li><a href="/contact">Contact</a></li>
-                                        <div class="nav-links" style="text-align: center;">
-                                            <li>
-                                                <a href="#" class="desktop-item" >Menu</a>
-                                                <ul class="drop-menu" style="left: 2%;font-size: 6px;color: #f2f2f2;">
-
-                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Hồ Sơ</a>
-                                                        <a th:if="${isLoggedIn == true}" th:href="@{/profile}">Hồ Sơ</a></li>
-                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Phiếu Đặt</a>
-                                                        <a th:if="${isLoggedIn == true}" th:href="@{/phieudat}">Phiếu Đặt</a></li>
-                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>
-                                                        <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Log out</a></li>
-                                                </ul>
-                                            </li>
-                                        </div>
+                                        <li><a href="/signup">Sign up</a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -177,13 +164,13 @@
     <!-- about_area_end -->
 
     <!-- offers_area_start -->
-    <div class="offers_area">
+    <div class="offers_area padding_top ">
         <div class="container">
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section_title text-center mb-100">
-                        <span>Our Offers</span>
-                        <h3>Ongoing Offers</h3>
+                        <!--                        <span>Our Offers</span>-->
+                        <h3>Một số kiểu phòng tham khảo</h3>
                     </div>
                 </div>
             </div>
@@ -191,46 +178,43 @@
                 <div class="col-xl-4 col-md-4">
                     <div class="single_offers">
                         <div class="about_thumb">
-                            <img src="img/offers/1.png" alt="">
+                            <img src="img/rooms/deluxe.jpg" alt="">
                         </div>
-                        <h3>Up to 35% savings on Club <br>
-                            rooms and Suites</h3>
+                        <h3>Deluxe Rooms</h3>
                         <ul>
                             <li>Luxaries condition</li>
-                            <li>3 Adults & 2 Children size</li>
+                            <li>Best Services</li>
                             <li>Sea view side</li>
                         </ul>
-                        <a href="#" class="book_now">book now</a>
+                        <a href="/booking" class="book_now">book now</a>
                     </div>
                 </div>
                 <div class="col-xl-4 col-md-4">
                     <div class="single_offers">
                         <div class="about_thumb">
-                            <img src="img/offers/2.png" alt="">
+                            <img src="img/rooms/executive.jpg" alt="">
                         </div>
-                        <h3>Up to 35% savings on Club <br>
-                            rooms and Suites</h3>
+                        <h3>Executive Rooms</h3>
                         <ul>
                             <li>Luxaries condition</li>
-                            <li>3 Adults & 2 Children size</li>
-                            <li>Sea view side</li>
+                            <li>Best Services</li>
+                            <li>City view side</li>
                         </ul>
-                        <a href="#" class="book_now">book now</a>
+                        <a href="/booking" class="book_now">book now</a>
                     </div>
                 </div>
                 <div class="col-xl-4 col-md-4">
                     <div class="single_offers">
                         <div class="about_thumb">
-                            <img src="img/offers/3.png" alt="">
+                            <img src="img/rooms/superior.jpg" style="height: 233.23px" alt="">
                         </div>
-                        <h3>Up to 35% savings on Club <br>
-                            rooms and Suites</h3>
+                        <h3>Superior Rooms</h3>
                         <ul>
                             <li>Luxaries condition</li>
-                            <li>3 Adults & 2 Children size</li>
-                            <li>Sea view side</li>
+                            <li>Best Services</li>
+                            <li>Pool view side</li>
                         </ul>
-                        <a href="#" class="book_now">book now</a>
+                        <a href="/booking" class="book_now">book now</a>
                     </div>
                 </div>
             </div>
@@ -244,7 +228,7 @@
             <span>Montana Sea View</span>
             <h3>Relax and Enjoy your <br>
                 Vacation </h3>
-            <a href="https://www.youtube.com/watch?v=vLnPwxZdW4Y" class="video_btn popup-video">
+            <a href="https://www.youtube.com/watch?v=pFIT89psxtY" class="video_btn popup-video">
                 <i class="fa fa-play"></i>
             </a>
         </div>
@@ -289,8 +273,8 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="section_title text-center mb-100">
-                        <span>Featured Rooms</span>
-                        <h3>Choose a Better Room</h3>
+                        <!--                        <span>Featured Rooms</span>-->
+                        <h3>Đa dạng các loại phòng</h3>
                     </div>
                 </div>
             </div>
@@ -298,49 +282,49 @@
         <div class="rooms_here">
             <div class="single_rooms">
                 <div class="room_thumb">
-                    <img src="img/rooms/1.png" alt="">
+                    <img src="img/rooms/singlerooms.jpg" style="height: 400px" alt="">
                     <div class="room_heading d-flex justify-content-between align-items-center">
                         <div class="room_heading_inner">
                             <span>From $250/night</span>
-                            <h3>Superior Room</h3>
+                            <h3>Single Room</h3>
                         </div>
-                        <a href="#" class="line-button">book now</a>
+                        <a href="/booking" class="line-button">book now</a>
                     </div>
                 </div>
             </div>
             <div class="single_rooms">
                 <div class="room_thumb">
-                    <img src="img/rooms/2.png" alt="">
+                    <img src="img/rooms/twinrooms.jpg" style="height: 400px" alt="">
                     <div class="room_heading d-flex justify-content-between align-items-center">
                         <div class="room_heading_inner">
                             <span>From $250/night</span>
-                            <h3>Deluxe Room</h3>
+                            <h3>Twin Rooms</h3>
                         </div>
-                        <a href="#" class="line-button">book now</a>
+                        <a href="/booking" class="line-button">book now</a>
                     </div>
                 </div>
             </div>
             <div class="single_rooms">
                 <div class="room_thumb">
-                    <img src="img/rooms/3.png" alt="">
+                    <img src="img/rooms/doublerooms.jpg" style="height: 400px" alt="">
                     <div class="room_heading d-flex justify-content-between align-items-center">
                         <div class="room_heading_inner">
                             <span>From $250/night</span>
-                            <h3>Signature Room</h3>
+                            <h3>Double Room</h3>
                         </div>
-                        <a href="#" class="line-button">book now</a>
+                        <a href="/booking" class="line-button">book now</a>
                     </div>
                 </div>
             </div>
             <div class="single_rooms">
                 <div class="room_thumb">
-                    <img src="img/rooms/4.png" alt="">
+                    <img src="img/rooms/triplerooms.jpg" style="height: 400px" alt="">
                     <div class="room_heading d-flex justify-content-between align-items-center">
                         <div class="room_heading_inner">
                             <span>From $250/night</span>
-                            <h3>Couple Room</h3>
+                            <h3>Triple Rooms</h3>
                         </div>
-                        <a href="#" class="line-button">book now</a>
+                        <a href="/booking" class="line-button">book now</a>
                     </div>
                 </div>
             </div>
@@ -362,7 +346,7 @@
                             </div>
                             <div class="col-xl-6 col-md-6">
                                 <div class="phone_num">
-                                    <a href="#" class="mobile_no">+10 576 377 4789</a>
+                                    <a href="#" class="mobile_no">+84365899252</a>
                                 </div>
                             </div>
                         </div>

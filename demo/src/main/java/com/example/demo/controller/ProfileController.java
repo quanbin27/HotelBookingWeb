@@ -32,14 +32,6 @@ public class ProfileController {
     public ProfileController(UserDetailsServiceImpl userDetailsService){
         this.userDetailsService=userDetailsService;
     }
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @ModelAttribute("isLoggedIn")
-    public boolean isLoggedIn() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.isAuthenticated());
-        return authentication != null  && !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
-    }
     @RequestMapping("profile")
     public String profile(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

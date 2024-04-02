@@ -46,17 +46,16 @@
                                         <li><a href="/rooms">rooms</a></li>
                                         <li><a class="active" href="/about">About</a></li>
                                         <li><a href="/contact">Contact</a></li>
+
+
                                         <div class="nav-links" style="text-align: center;">
                                             <li>
                                                 <a href="#" class="desktop-item" >Menu</a>
                                                 <ul class="drop-menu" style="left: 2%;font-size: 6px;color: #f2f2f2;">
 
-                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Hồ Sơ</a>
-                                                        <a th:if="${isLoggedIn == true}" th:href="@{/profile}">Hồ Sơ</a></li>
-                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Phiếu Đặt</a>
-                                                        <a th:if="${isLoggedIn == true}" th:href="@{/phieudat}">Phiếu Đặt</a></li>
-                                                    <li><a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>
-                                                        <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Log out</a></li>
+                                                    <li><a th:href="@{/profile}">Hồ Sơ</a></li>
+                                                    <li><a th:href="@{/phieudat}">Phiếu Đặt</a></li>
+                                                    <li><a th:href="@{/logout}">Log out</a></li>
                                                 </ul>
                                             </li>
                                         </div>
@@ -92,16 +91,53 @@
     <!-- header-end -->
 
     <!-- bradcam_area_start -->
-    <div class="bradcam_area breadcam_bg">
+    <div class="bradcam_area breadcam_bg_2" style="padding: 145px 0 20px">
         <h3>Booking Montana</h3>
     </div>
     <!-- bradcam_area_end -->
+    <form action="#" th:action="@{/showHangPhong}" method="post">
+        <label for="checkin">Check In Date:</label>
+        <input type="date" id="checkin" name="checkInDate" th:value="${session.checkInDate}">
 
-    <!-- about_area_start -->
-    
+        <label for="checkout">Check Out Date:</label>
+        <input type="date" id="checkout" name="checkOutDate" th:value="${session.checkOutDate}">
+
+        <label for="roomType">Room Type:</label>
+        <select id="roomType" name="roomType" >
+            <option value="">-- Select Room Type --</option>
+            <option th:each="loaiphong : ${loaiphongs}" th:value="${loaiphong.maLP}" th:text="${loaiphong.tenLP}+'('+${loaiphong.moTa}+')'" th:selected="${loaiphong.maLP == session.selectedRoomType}"></option>
+        </select>
+
+        <button type="submit">Show Room Categories</button>
+    </form>
+
+    <!-- Display Room Categories Here -->
+    <div th:if="${hangphongs}">
+        <h3>Available Hang Phong</h3>
+        <form th:action="@{/bookRoom}" method="post">
+            <ul>
+                <li th:each="hangphong : ${hangphongs}">
+                    <label th:text="${hangphong.kieuphong.tenKP}"></label>
+                    <label th:text="${hangphong.getDonGia()}"></label>
+                    <label th:text="${hangphong.kieuphong.getMoTa()}"></label>
+                    <img th:src="'data:image/png;base64,' + ${hangphong.getKieuphong().getBase64Image()}" alt="Rooms Image" />
+                    <input type="number" name="quantity" th:value="${soLuongDaDatMap[hangphong.maHP] != null ? soLuongDaDatMap[hangphong.maHP] : 0}" min="0" th:max="${soLuongPhongTrong[hangphong.maHP]}" >
+                    <!-- Thêm trường input ẩn để lưu trữ id của hạng phòng -->
+                    <input type="hidden" name="hangPhongId" th:value="${hangphong.maHP}">
+                </li>
+            </ul>
+            <button type="submit">Book Selected Rooms</button>
+        </form>
+    </div>
+
+
+
+
+
+
     <!-- footer -->
     <footer class="footer" >
-        <div class="footer_top">
+        <div id="redbutton"class="footer_top">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-3 col-md-6 col-lg-3">
@@ -189,53 +225,53 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     </footer>
     <!-- footer_end -->
 
-<!--     form itself end-->
-    <form id="test-form" class="white-popup-block mfp-hide">
-        <div class="popup_box ">
-                <div class="popup_inner">
-                    <h3>Check Availability</h3>
-                    <form action="#">
-                        <div class="row">
-                            <div class="col-xl-6">
-                                <input id="datepicker" placeholder="Check in date">
-                            </div>
-                            <div class="col-xl-6">
-                                <input id="datepicker2" placeholder="Check out date">
-                            </div>
-                            <div class="col-xl-6">
-                                <select class="form-select wide" id="adult" class="">
-                                    <option data-display="Adult">1</option>
-                                    <option value="1">2</option>
-                                    <option value="2">3</option>
-                                    <option value="3">4</option>
-                                </select>
-                            </div>
-                            <div class="col-xl-6">
-                                <select class="form-select wide" id="children" class="">
-                                    <option data-display="Children">1</option>
-                                    <option value="1">2</option>
-                                    <option value="2">3</option>
-                                    <option value="3">4</option>
-                                </select>
-                            </div>
-                            <div class="col-xl-12">
-                                <select class="form-select wide" id="roomtype" class="">
-                                    <option data-display="Room type">Room type</option>
-                                    <option value="1">Laxaries Rooms</option>
-                                    <option value="2">Deluxe Room</option>
-                                    <option value="3">Signature Room</option>
-                                    <option value="4">Couple Room</option>
-                                </select>
-                            </div>
-                            <div class="col-xl-12">
-                                <button type="submit" class="boxed-btn3">Check Availability</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-    </form>
-<!-- form itself end-->
+<!--&lt;!&ndash;     form itself end&ndash;&gt;-->
+<!--    <form id="test-form" class="white-popup-block mfp-hide">-->
+<!--        <div class="popup_box ">-->
+<!--                <div class="popup_inner">-->
+<!--                    <h3>Check Availability</h3>-->
+<!--                    <form action="#">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-xl-6">-->
+<!--                                <input id="datepicker" placeholder="Check in date">-->
+<!--                            </div>-->
+<!--                            <div class="col-xl-6">-->
+<!--                                <input id="datepicker2" placeholder="Check out date">-->
+<!--                            </div>-->
+<!--                            <div class="col-xl-6">-->
+<!--                                <select class="form-select wide" id="adult" class="">-->
+<!--                                    <option data-display="Adult">1</option>-->
+<!--                                    <option value="1">2</option>-->
+<!--                                    <option value="2">3</option>-->
+<!--                                    <option value="3">4</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                            <div class="col-xl-6">-->
+<!--                                <select class="form-select wide" id="children" class="">-->
+<!--                                    <option data-display="Children">1</option>-->
+<!--                                    <option value="1">2</option>-->
+<!--                                    <option value="2">3</option>-->
+<!--                                    <option value="3">4</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                            <div class="col-xl-12">-->
+<!--                                <select class="form-select wide" id="roomtype" class="">-->
+<!--                                    <option data-display="Room type">Room type</option>-->
+<!--                                    <option value="1">Laxaries Rooms</option>-->
+<!--                                    <option value="2">Deluxe Room</option>-->
+<!--                                    <option value="3">Signature Room</option>-->
+<!--                                    <option value="4">Couple Room</option>-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                            <div class="col-xl-12">-->
+<!--                                <button type="submit" class="boxed-btn3">Check Availability</button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--    </form>-->
+<!--&lt;!&ndash; form itself end&ndash;&gt;-->
 
 
     <!-- JS here -->
