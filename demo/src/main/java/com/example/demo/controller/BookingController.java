@@ -1,31 +1,32 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.ChiTietPhieuDat;
-import com.example.demo.entity.HangPhong;
-import com.example.demo.entity.LoaiPhong;
-import com.example.demo.entity.PhieuDat;
-import com.example.demo.repository.HangPhongRepository;
-import com.example.demo.repository.LoaiPhongRepository;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.impl.CoinPaymentsService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static com.example.demo.service.impl.CoinPaymentsService.generateHmac;
 
 @Controller
 public class BookingController {
@@ -33,23 +34,27 @@ public class BookingController {
     private LoaiPhongRepository loaiPhongRepository;
     @Autowired
     private HangPhongRepository hangPhongRepository;
-
+    @Autowired
+    private TaiKhoanRepository taiKhoanRepository;
     @GetMapping("booking")
     public String booking(Model model, HttpSession session){
-
-            PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
-            if (bookingInfo==null){
+             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+             TaiKhoan taiKhoan = taiKhoanRepository.findUserAccount(authentication.getName());
+             PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
+             if (bookingInfo==null){
                 bookingInfo=new PhieuDat();
                 String maPD = UUID.randomUUID().toString().substring(1,7);
                 bookingInfo.setMaPD(maPD);
+                bookingInfo.setTrangThai("Chua Thanh Toan");
+                bookingInfo.setKhachHang(taiKhoan.getKhachHang());
                 session.setAttribute("bookingInfo",bookingInfo);
 
-            }
-            List<LoaiPhong> loaiPhongs = loaiPhongRepository.findAll();
-            model.addAttribute("loaiphongs",loaiPhongs);
-            model.addAttribute("checkinDate", bookingInfo.getNgayBD());
-            model.addAttribute("checkoutDate", bookingInfo.getNgayTra());
-            return "booking";
+             }
+             List<LoaiPhong> loaiPhongs = loaiPhongRepository.findAll();
+             model.addAttribute("loaiphongs",loaiPhongs);
+             model.addAttribute("checkinDate", bookingInfo.getNgayBD());
+             model.addAttribute("checkoutDate", bookingInfo.getNgayTra());
+             return "booking";
     }
     @PostMapping("/showHangPhong")
     public String showRoomCategories(@RequestParam("roomType") String roomType,
@@ -65,6 +70,20 @@ public class BookingController {
         session.setAttribute("checkOutDate", checkOutDate);
         // Lấy thông tin phiếu đặt từ session
         PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            // Chuyển đổi chuỗi thành kiểu Date
+            Date checkIn = dateFormat.parse(checkInDate);
+            Date checkOut = dateFormat.parse(checkOutDate);
+            Date today= new Date();
+            // In ra màn hình kiểm tra
+            bookingInfo.setNgayBD(checkIn);
+            bookingInfo.setNgayTra(checkOut);
+            bookingInfo.setNgayDat(today);
+        } catch (ParseException e) {
+            System.out.println("Định dạng ngày không hợp lệ!");
+            e.printStackTrace();
+        }
 
         // Tạo một Map để lưu số lượng đã đặt của từng hạng phòng
         Map<String, Integer> soLuongDaDatMap = new HashMap<>();
@@ -76,12 +95,15 @@ public class BookingController {
                 int soLuongDaDat = 0;
                 // Lặp qua danh sách chi tiết phiếu đặt của phiếu đặt để tính toán số lượng đã đặt của hạng phòng hiện tại
                 for (ChiTietPhieuDat chiTietPhieuDat : bookingInfo.getChitietphieudats()) {
-                    if (chiTietPhieuDat.getHangphong().equals(hangPhong)) {
+                    System.out.println("vaoday 1"+chiTietPhieuDat.getHangphong().getMaHP()+chiTietPhieuDat.getSoLuong());
+                    if (chiTietPhieuDat.getHangphong().getMaHP().equals(hangPhong.getMaHP())) {
+                        System.out.println("vaoday"+chiTietPhieuDat.getSoLuong()+hangPhong.getMaHP());
                         soLuongDaDat += chiTietPhieuDat.getSoLuong();
                     }
                 }
                 // Lưu số lượng đã đặt vào Map
                 soLuongDaDatMap.put(hangPhong.getMaHP(), soLuongDaDat);
+                System.out.println(soLuongDaDatMap.toString());
             }
         }
         for (HangPhong hangPhong : hangPhongs){
@@ -103,6 +125,7 @@ public class BookingController {
                            HttpSession session) {
         // Lấy thông tin phiếu đặt từ session
         PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
+        System.out.println(bookingInfo.getMaPD()+bookingInfo.getTrangThai());
         double tongtien=bookingInfo.getTongTien();
 
         // Lặp qua danh sách các hạng phòng và số lượng đã chọn
@@ -128,9 +151,8 @@ public class BookingController {
                 ChiTietPhieuDat chiTietPhieuDat = new ChiTietPhieuDat();
                 chiTietPhieuDat.setHangphong(selectedRoom);
                 chiTietPhieuDat.setSoLuong(quantity);
-
-                // Thêm chi tiết phiếu đặt vào phiếu đặt
-                bookingInfo.addChiTietPhieuDat(chiTietPhieuDat);
+                chiTietPhieuDat.setPhieudat(bookingInfo);
+                bookingInfo.getChitietphieudats().add(chiTietPhieuDat);
             }
             tongtien=tongtien+quantity*selectedRoom.getDonGia();
         }
@@ -145,35 +167,131 @@ public class BookingController {
     public String showBookingInfo(HttpSession session, Model model) {
         // Lấy thông tin phiếu đặt từ session
         PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
-
+        System.out.println(bookingInfo.getTrangThai()+"getbkif");
+        maPD=bookingInfo.getMaPD();
         // Truyền thông tin phiếu đặt vào model để hiển thị trên trang HTML
         model.addAttribute("bookingInfo", bookingInfo);
 
         return "booking-info"; // Trả về trang HTML để hiển thị thông tin phiếu đặt
     }
-    @Autowired
-    private CoinPaymentsService coinPaymentsService;
-
-    @PostMapping("/process-payment")
-    public String processPayment(HttpSession session, Model model) {
+    @GetMapping("/booking-info-success")
+    public String showBookingInfoSuccess(HttpSession session, Model model) {
         // Lấy thông tin phiếu đặt từ session
         PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
+        Optional<PhieuDat> pd=phieuDatRepository.findById(bookingInfo.getMaPD());
+        session.removeAttribute("bookingInfo");
+        session.removeAttribute("checkInDate");
+        session.removeAttribute("checkOutDate");
+        session.removeAttribute("selectedRoomType");
+        PhieuDat phieuDat=pd.get();
+        model.addAttribute("bookingInfo", phieuDat);
+        return "booking-info-success"; // Trả về trang HTML để hiển thị thông tin phiếu đặt
+    }
+    public String maPD;
+    @Autowired
+    private CoinPaymentsService coinPaymentsService;
+    @Autowired
+    private PhieuDatRepository phieuDatRepository;
+    @Autowired
+    private ChiTietPhieuDatRepository chiTietPhieuDatRepository;
+    @PostMapping("/process-payment")
+    @ResponseBody
+    public String processPayment(HttpSession session) {
+        System.out.println("Ma PD:" +maPD);
+        PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
         System.out.println("chuyen toi checkoutcoin");
-            // Thực hiện thanh toán và nhận kết quả từ CoinPayments API
         try {
-            String transactionResult = coinPaymentsService.createFixedPricePayment(1,"LTCT","LTCT","votrungquan2002@gmail.com");
+            String transactionResult = coinPaymentsService.createFixedPricePayment(1,"LTCT","LTCT","votrungquan2002@gmail.com",bookingInfo.getKhachHang().getTen(),bookingInfo.getMaPD());
             System.out.println(transactionResult);
-            // Xử lý kết quả thanh toán
-            JSONObject jsonObject = new JSONObject(transactionResult);
-            String checkoutUrl = jsonObject.getString("checkout_url");
 
-            // Truyền checkoutUrl vào trang thanh toán
-            return "redirect:" + checkoutUrl;
+                System.out.println("dung format");
+                JSONObject jsonObject = new JSONObject(transactionResult);
+                // Lấy đối tượng JSON con "result" từ đối tượng JSON chính
+
+                JSONObject resultObject = jsonObject.getJSONObject("result");
+                // Lấy giá trị của trường "checkout_url" từ đối tượng JSON con "result"
+                String checkoutUrl = resultObject.getString("checkout_url");
+                System.out.println(checkoutUrl + "link url");
+                phieuDatRepository.save(bookingInfo);
+                return checkoutUrl;
+
+        } catch (Exception e) {
+            System.err.println("Lỗi coinPaymentsService: " + e.getMessage());
+            return "payment-error: Unexpected error";
         }
-        catch (Exception e){
-            return "payment-error";
+    }
+    @GetMapping("/get-session")
+    public String getsession(HttpSession session) {
+        PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
+        System.out.println(bookingInfo.getMaPD());
+        return "redirect:/booking-info";
+    }
+    @PostMapping("/coinpayments-ipn")
+    public ResponseEntity<String> handleCoinPaymentsIPN(HttpServletRequest request, HttpSession session, RedirectAttributes redirectAttributes) {
+        System.out.println("da nhan IPN"+maPD);
+        try {
+            // Lấy dữ liệu POST từ CoinPayments
+            BufferedReader reader = request.getReader();
+            StringBuilder postData = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                postData.append(line);
+            }
+
+            // Xác minh chữ ký HMAC
+            String ipnSecret = "Bin27052002@"; // Thay thế bằng IPN Secret của bạn
+            String hmacHeader = request.getHeader("HMAC");
+            if (hmacHeader == null || hmacHeader.isEmpty()) {
+                return ResponseEntity.badRequest().body("No HMAC signature sent");
+            }
+
+             try {
+                 String calculatedHmac = generateHmac(ipnSecret,postData.toString());
+                 if (!hmacHeader.equals(calculatedHmac)) {
+                     return ResponseEntity.badRequest().body("HMAC signature does not match");
+                 }
+             } catch (Exception e){
+                 return ResponseEntity.badRequest().body("HMAC generate Error");
+             }
+            System.out.println("Dung HMAC ->Xu ly IPN");
+            // Xử lý thông báo IPN
+            System.out.println("Postdata: " + postData);
+            String[] keyValuePairs = postData.toString().split("&");
+
+// Tạo một Map để lưu trữ dữ liệu
+            Map<String, String> dataMap = new HashMap<>();
+
+// Lặp qua từng cặp key-value và thêm vào Map
+            for (String pair : keyValuePairs) {
+                String[] entry = pair.split("=");
+                if (entry.length == 2) {
+                    String key = entry[0];
+                    String value = entry[1];
+                    dataMap.put(key, value);
+                }
+            }
+            String ipnType = dataMap.get("ipn_type");
+            System.out.println("da get ipn_type:"+ipnType);
+            if ("api".equals(ipnType)) {
+                String status = dataMap.get("status");
+                Optional<PhieuDat> phieuDat=phieuDatRepository.findById(maPD);
+                if (phieuDat.isPresent()) {
+                    PhieuDat phieu = phieuDat.get();
+                    if ( status.equals("100")||status.equals("2")) {
+                        phieu.setTrangThai("Da Thanh Toan");
+                        phieuDatRepository.save(phieu);
+                    }
+                    else if ( status.equals("-1")) {
+                        phieuDatRepository.delete(phieu);
+                    }
+                }
+            }
+            // Trả về 200 OK để báo cho CoinPayments biết rằng IPN đã được xử lý thành công
+            System.out.println("tra ve 200");
+            return ResponseEntity.ok("IPN processed successfully");
+        } catch (IOException | JSONException e) {
+            System.out.println("Json+IO"+e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing IPN: " + e.getMessage());
         }
-
-
     }
 }

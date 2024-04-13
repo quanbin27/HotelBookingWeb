@@ -27,7 +27,7 @@ public class CoinPaymentsService {
         this.httpClient = new OkHttpClient();
     }
 
-    public String createFixedPricePayment(double amount, String currency1, String currency2, String buyerEmail) throws Exception {
+    public String createFixedPricePayment(double amount, String currency1, String currency2, String buyerEmail,String buyerName,String maPD) throws Exception {
         String cmd = "create_transaction";
 
         // Tạo nonce (mã số duy nhất) cho mỗi cuộc gọi API
@@ -42,6 +42,8 @@ public class CoinPaymentsService {
         postData.put("currency1", currency1);
         postData.put("currency2", currency2);
         postData.put("buyer_email", buyerEmail);
+        postData.put("buyer_name", buyerName);
+        postData.put("item_number",maPD);
         System.out.println((buildQueryString(postData)));
         // Tạo chữ ký HMAC từ dữ liệu POST và khóa bí mật API
         String hmac = generateHmac(API_PRIVATE_KEY,(buildQueryString(postData)));

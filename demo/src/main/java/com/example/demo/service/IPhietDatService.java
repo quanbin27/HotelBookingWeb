@@ -10,7 +10,7 @@ public interface IPhietDatService {
 
     List<PhieuDat> findAllById(Iterable<String> strings);
 
-    <S extends PhieuDat> S save(S entity);
+
     Optional<PhieuDat> findById(String s);
 
     long count();

@@ -94,12 +94,6 @@
         <h3>Laxaries Rooms</h3>
     </div>
     <!-- bradcam_area_end -->
-    <div th:each="kieuphong :${listkieuphong}">
-        <p>Name: <span th:text="${kieuphong.tenKP}"></span></p>
-        <img th:src="@{'data:image/png;base64,' + ${kieuphong.base64Image} }" alt="Rooms Image" />
-    </div>
-    <span th:text="${timetest}"></span>
-
     <!-- offers_area_start -->
     <div class="offers_area padding_top ">
         <div class="container">

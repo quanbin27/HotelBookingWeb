@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,4 +29,6 @@ public class KhachHang implements Serializable {
     private String Email;
     @OneToOne(mappedBy = "khachHang")
     private TaiKhoan taiKhoan;
+    @OneToMany(mappedBy = "khachHang",cascade = CascadeType.ALL)
+    private Set<PhieuDat> phieudats;
 }

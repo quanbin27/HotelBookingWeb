@@ -11,8 +11,6 @@ public interface IChiTietPhieuDatService {
 
     List<ChiTietPhieuDat> findAllById(Iterable<Long> longs);
 
-    <S extends ChiTietPhieuDat> S save(S entity);
-
     Optional<ChiTietPhieuDat> findById(Long aLong);
 
     long count();

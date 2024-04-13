@@ -28,10 +28,7 @@ public class PhieuDatServiceImpl implements IPhietDatService {
         return phieuDatRepository.findAllById(strings);
     }
 
-    @Override
-    public <S extends PhieuDat> S save(S entity) {
-        return phieuDatRepository.save(entity);
-    }
+
 
     @Override
     public Optional<PhieuDat> findById(String s) {

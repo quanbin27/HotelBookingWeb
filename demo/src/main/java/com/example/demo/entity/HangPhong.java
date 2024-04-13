@@ -5,7 +5,8 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.Set;
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -17,7 +18,7 @@ public class HangPhong implements Serializable {
     private String TenHP;
     private Long DonGia;
     private int SoNguoi;
-    @OneToMany(mappedBy = "hangphong",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hangphong",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Phong> phongs;
     @ManyToOne
     @JoinColumn(name = "MaKP")

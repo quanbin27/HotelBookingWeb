@@ -29,10 +29,7 @@ public class ChiTietPhieuDatServiceImpl implements IChiTietPhieuDatService {
         return chiTietPhieuDatRepository.findAllById(longs);
     }
 
-    @Override
-    public <S extends ChiTietPhieuDat> S save(S entity) {
-        return chiTietPhieuDatRepository.save(entity);
-    }
+
 
     @Override
     public Optional<ChiTietPhieuDat> findById(Long aLong) {

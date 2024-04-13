@@ -20,7 +20,9 @@ public class PhieuDat implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private String MaPD;
-    private String CCCD;
+    @ManyToOne
+    @JoinColumn(name = "CCCD")
+    private KhachHang khachHang;
     @Temporal(TemporalType.DATE)
     private Date NgayDat;
     @Temporal(TemporalType.DATE)
@@ -29,12 +31,7 @@ public class PhieuDat implements Serializable {
     private Date NgayTra;
     private String TrangThai;
     private double TongTien;
-    @OneToMany(mappedBy = "phieudat",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "phieudat",cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<ChiTietPhieuDat> chitietphieudats= new HashSet<>();
-
-    public void addChiTietPhieuDat(ChiTietPhieuDat chiTietPhieuDat) {
-        this.chitietphieudats.add(chiTietPhieuDat);
-    }
-
 }

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface PhieuDatRepository extends JpaRepository<PhieuDat,String> {
     List<PhieuDat> findAll();
+    PhieuDat save(PhieuDat phieuDat);
 }

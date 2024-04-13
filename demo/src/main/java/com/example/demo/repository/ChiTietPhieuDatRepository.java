@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChiTietPhieuDatRepository extends JpaRepository<ChiTietPhieuDat,Long> {
-
+    ChiTietPhieuDat save(ChiTietPhieuDat entity);
 }

@@ -95,45 +95,56 @@
         <h3>Booking Montana</h3>
     </div>
     <!-- bradcam_area_end -->
-    <form action="#" th:action="@{/showHangPhong}" method="post">
+    <form th:action="@{/showHangPhong}" method="post" class="form-booking"style="text-align: center">
         <label for="checkin">Check In Date:</label>
-        <input type="date" id="checkin" name="checkInDate" th:value="${session.checkInDate}">
+        <input type="date" id="checkin" name="checkInDate" th:value="${session.checkInDate}"required>
 
         <label for="checkout">Check Out Date:</label>
-        <input type="date" id="checkout" name="checkOutDate" th:value="${session.checkOutDate}">
+        <input type="date" id="checkout" name="checkOutDate" th:value="${session.checkOutDate}" required>
 
         <label for="roomType">Room Type:</label>
-        <select id="roomType" name="roomType" >
-            <option value="">-- Select Room Type --</option>
-            <option th:each="loaiphong : ${loaiphongs}" th:value="${loaiphong.maLP}" th:text="${loaiphong.tenLP}+'('+${loaiphong.moTa}+')'" th:selected="${loaiphong.maLP == session.selectedRoomType}"></option>
+        <select id="roomType" name="roomType" required >
+            <option value=""disabled selected hidden>-- Select Room Type --</option>
+            <option th:each="loaiphong : ${loaiphongs}" th:value="${loaiphong.maLP}" th:text="${loaiphong.tenLP}+'('+${loaiphong.moTa}+')'" th:selected="${loaiphong.maLP == session.selectedRoomType}" ></option>
         </select>
 
-        <button type="submit">Show Room Categories</button>
+        <button type="submit" class="button-60">Show Room Categories</button>
     </form>
-
-    <!-- Display Room Categories Here -->
-    <div th:if="${hangphongs}">
-        <h3>Available Hang Phong</h3>
-        <form th:action="@{/bookRoom}" method="post">
-            <ul>
-                <li th:each="hangphong : ${hangphongs}">
-                    <label th:text="${hangphong.kieuphong.tenKP}"></label>
-                    <label th:text="${hangphong.getDonGia()}"></label>
-                    <label th:text="${hangphong.kieuphong.getMoTa()}"></label>
-                    <img th:src="'data:image/png;base64,' + ${hangphong.getKieuphong().getBase64Image()}" alt="Rooms Image" />
-                    <input type="number" name="quantity" th:value="${soLuongDaDatMap[hangphong.maHP] != null ? soLuongDaDatMap[hangphong.maHP] : 0}" min="0" th:max="${soLuongPhongTrong[hangphong.maHP]}" >
-                    <!-- Thêm trường input ẩn để lưu trữ id của hạng phòng -->
-                    <input type="hidden" name="hangPhongId" th:value="${hangphong.maHP}">
-                </li>
-            </ul>
-            <button type="submit">Book Selected Rooms</button>
+    <div th:if="${hangphongs}" class="container mt-5 mb-5" >
+        <form th:action="@{/bookRoom}" method="post" style="margin-bottom: 30px;padding-bottom: 30px">
+            <div class="d-flex justify-content-center row">
+                <ul class="col-md-10">
+                    <li th:each="hangphong : ${hangphongs}" class="row p-2 bg-white border rounded">
+                        <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" th:src="'data:image/png;base64,' + ${hangphong.getKieuphong().getBase64Image()}"></div>
+                        <div class="col-md-6 mt-1">
+                            <h5 th:text="${hangphong.getKieuphong().getTenKP()}"></h5>
+                            <div class="d-flex flex-row">
+                                <div class="ratings mr-2"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></div>
+                            </div>
+                            <div class="mt-1 mb-1 spec-1">
+                                <span>Wifi</span><span class="dot"></span>
+                            </div>
+                            <div class="mt-1 mb-1 spec-1">
+                                <span>View phòng: </span>
+                                <span th:text="${hangphong.getKieuphong().getViewPhong()}"></span>
+                            </div>
+                            <span th:text="${hangphong.getKieuphong().getMoTa()}"></span>
+                        </div>
+                        <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                            <div class="d-flex flex-row align-items-center">
+                                <h4 class="mr-1" th:text="${hangphong.getDonGia()}"></h4><span class="strike-text">$20.99</span>
+                            </div>
+                            <h6 class="text-success">Free shipping</h6>
+                            <div class="d-flex flex-column mt-4"><input type="number" name="quantity" th:value="${soLuongDaDatMap[hangphong.maHP] != null ? soLuongDaDatMap[hangphong.maHP] : 0}" min="0" th:max="${soLuongPhongTrong[hangphong.maHP]}" ></div>
+                        </div>
+                        <input type="hidden" name="hangPhongId" th:value="${hangphong.maHP}">
+                    </li>
+                </ul>
+            </div>
+            <button class="btn btn-primary btn-sm" type="submit" style="text-align: center;position: absolute;display: block;margin-top: 20px;left: 50%;margin-left: -91px;padding: .35rem 1.2rem">Book Selected Rooms</button>
         </form>
     </div>
-
-
-
-
-
+    <!-- Display Room Categories Here -->
 
     <!-- footer -->
     <footer class="footer" >
@@ -223,6 +234,26 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
             </div>
         </div>
     </footer>
+    <script>
+        // Tính toán ngày hôm nay
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        today = yyyy + '-' + mm + '-' + dd;
+
+        // Tính toán ngày mai
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        var dd_tomorrow = String(tomorrow.getDate()).padStart(2, '0');
+        var mm_tomorrow = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        var yyyy_tomorrow = tomorrow.getFullYear();
+        tomorrow = yyyy_tomorrow + '-' + mm_tomorrow + '-' + dd_tomorrow;
+
+        // Gán giá trị tối thiểu cho trường ngày check out
+        document.getElementById("checkout").setAttribute("min", tomorrow);
+        document.getElementById("checkin").setAttribute("min", today);
+    </script>
     <!-- footer_end -->
 
 <!--&lt;!&ndash;     form itself end&ndash;&gt;-->
