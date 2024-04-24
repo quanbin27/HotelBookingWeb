@@ -24,20 +24,6 @@
     <link rel="stylesheet" th:href="@{/css/animate.css}">
     <link rel="stylesheet" th:href="@{/css/slicknav.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
     <!-- <link rel="stylesheet" href="css/responsive.css"> -->
 </head>
 
@@ -106,72 +92,31 @@
 
 <!-- bradcam_area_start -->
 <div class="bradcam_area breadcam_bg_2" style="padding: 145px 0 20px">
-    <h3>Booking Montana</h3>
+    <h3>Booking History</h3>
 </div>
+<!-- bradcam_area_end -->
+<table >
+    <tr>
+        <th>Mã Phiếu Đặt</th>
+        <th>Ngày Bắt Đầu</th>
+        <th>Ngày Kết Thúc</th>
+        <th>check</th>
+        <!-- Thêm các cột khác nếu cần -->
+    </tr>
+    <!-- Duyệt qua danh sách phiếu đặt -->
+    <tr th:each="phieuDat : ${listphieudat}">
+        <form action="/booking-info" method="post">
+            <input type="hidden" name="maPD" th:value="${phieuDat.getMaPD()}">
+            <td th:text="${phieuDat.getMaPD()}"></td>
+            <td th:text="${phieuDat.getTrangThai()}"></td>
+            <td th:text="${phieuDat.getNgayDat()}"></td>
+            <td><button type="submit" >Check</button></td>
+        </form>
 
-<div class="container px-3 my-5 clearfix">
-    <!-- Shopping cart table -->
-    <div class="card">
-        <div class="card-header">
-            <h2>Thông Tin Phiếu Đặt</h2>
-            <span>Mã PD: </span> <span th:text="${bookingInfo.getMaPD()}"></span>
-            <br>
-            <span>Trạng thái: </span> <span th:text="${bookingInfo.getTrangThai()}"></span><br>
-            <span>Ngày nhận phòng: </span> <span th:text="${bookingInfo.getNgayBD()}"></span><br>
-            <span>Ngày trả phòng: </span> <span th:text="${bookingInfo.getNgayTra()}"></span>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered m-0">
-                    <thead>
-                    <tr >
-                        <!-- Set columns width -->
-                        <th class="text-center py-3 px-4" style="min-width: 400px;">Hạng Phòng</th>
-                        <th class="text-right py-3 px-4" style="width: 100px;">Giá</th>
-                        <th class="text-center py-3 px-4" style="width: 120px;">Số Lượng</th>
-                        <th class="text-right py-3 px-4" style="width: 100px;">Tổng</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+        <!-- Thêm các cột khác nếu cần -->
+    </tr>
+</table>
 
-                    <tr th:each="chiTiet : ${bookingInfo.getChitietphieudats()}">
-                        <td class="p-4">
-                            <div class="media align-items-center">
-                                <img th:src="'data:image/png;base64,' + ${chiTiet.getHangphong().getKieuphong().getBase64Image()}" class="d-block ui-w-40 ui-bordered mr-4" alt="">
-                                <div class="media-body">
-                                    <a href="#" class="d-block text-dark" th:text="${chiTiet.getHangphong().getKieuphong().getTenKP()}"></a>
-                                    <a href="#" class="d-block text-dark" th:text="${chiTiet.getHangphong().getLoaiphong().getTenLP()}"></a>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-right font-weight-semibold align-middle p-4" th:text="${chiTiet.getHangphong().getDonGia()}"></td>
-                        <td class="align-middle p-4" th:text="${chiTiet.getSoLuong()}"></td>
-                        <td class="text-right font-weight-semibold align-middle p-4" th:text="${chiTiet.getSoLuong()*chiTiet.getHangphong().getDonGia()}"></td>
-                    </tr>
-
-
-
-                    </tbody>
-                </table>
-            </div>
-            <!-- / Shopping cart table -->
-
-            <div class="d-flex flex-wrap justify-content-between align-items-center pb-4">
-                <div class="d-flex">
-                    <div class="text-right mt-4">
-                        <label class="text-muted font-weight-normal m-0">Tổng cộng</label>
-                        <div class="text-large"><strong th:text="${bookingInfo.getTongTien()}"></strong></div>
-                    </div>
-                </div>
-            </div>
-            <div class="float-right">
-                <a href="/booking" class="btn btn-lg btn-primary mt-2" >Thêm phiếu đặt mới</a>
-                <a href="/home" class="btn btn-lg btn-primary mt-2">Về Trang Chủ</a>
-            </div>
-
-        </div>
-    </div>
-</div>
 <!-- footer -->
 <footer class="footer" >
     <div id="redbutton"class="footer_top">
@@ -260,6 +205,26 @@
         </div>
     </div>
 </footer>
+<script>
+    // Tính toán ngày hôm nay
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+    today = yyyy + '-' + mm + '-' + dd;
+
+    // Tính toán ngày mai
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var dd_tomorrow = String(tomorrow.getDate()).padStart(2, '0');
+    var mm_tomorrow = String(tomorrow.getMonth() + 1).padStart(2, '0');
+    var yyyy_tomorrow = tomorrow.getFullYear();
+    tomorrow = yyyy_tomorrow + '-' + mm_tomorrow + '-' + dd_tomorrow;
+
+    // Gán giá trị tối thiểu cho trường ngày check out
+    document.getElementById("checkout").setAttribute("min", tomorrow);
+    document.getElementById("checkin").setAttribute("min", today);
+</script>
 <!-- footer_end -->
 
 <!--&lt;!&ndash;     form itself end&ndash;&gt;-->

@@ -10,4 +10,5 @@ import java.util.List;
 public interface PhieuDatRepository extends JpaRepository<PhieuDat,String> {
     List<PhieuDat> findAll();
     PhieuDat save(PhieuDat phieuDat);
+    List<PhieuDat> findByKhachHangCCCD(String khachHangCCCD);
 }

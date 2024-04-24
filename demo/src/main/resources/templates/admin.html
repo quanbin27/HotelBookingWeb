@@ -50,10 +50,10 @@
                                         <li>
                                             <a href="#" class="desktop-item" >Menu</a>
                                             <ul class="drop-menu" style="left: 2%;font-size: 6px;color: #f2f2f2;">
-                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Hồ Sơ</a>
-                                                    <a th:if="${isLoggedIn == true}" th:href="@{/profile}">Hồ Sơ</a></li>
-                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Phiếu Đặt</a>
-                                                    <a th:if="${isLoggedIn == true}" th:href="@{/phieudat}">Phiếu Đặt</a></li>
+                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Profile</a>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/profile}">Profile</a></li>
+                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Booking History</a>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/bookinghistory}">Booking History</a></li>
                                                 <li><a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>
                                                     <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Log out</a></li>
                                             </ul>

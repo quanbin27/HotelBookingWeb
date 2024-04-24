@@ -169,10 +169,19 @@ public class BookingController {
         PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
         System.out.println(bookingInfo.getTrangThai()+"getbkif");
         maPD=bookingInfo.getMaPD();
+
         // Truyền thông tin phiếu đặt vào model để hiển thị trên trang HTML
         model.addAttribute("bookingInfo", bookingInfo);
-
+        model.addAttribute("checkInDate",session.getAttribute("checkInDate"));
+        model.addAttribute("checkOutDate",session.getAttribute("checkOutDate"));
         return "booking-info"; // Trả về trang HTML để hiển thị thông tin phiếu đặt
+    }
+    @PostMapping("/booking-info")
+    public String showBookingInfo(@RequestParam("maPD") String maPD,Model model){
+        Optional<PhieuDat> pd = phieuDatRepository.findById(maPD);
+        PhieuDat bookingInfo = pd.get();
+        model.addAttribute("bookingInfo",bookingInfo);
+        return "booking-info-success";
     }
     @GetMapping("/booking-info-success")
     public String showBookingInfoSuccess(HttpSession session, Model model) {
@@ -187,7 +196,7 @@ public class BookingController {
         model.addAttribute("bookingInfo", phieuDat);
         return "booking-info-success"; // Trả về trang HTML để hiển thị thông tin phiếu đặt
     }
-    public String maPD;
+    private String maPD;
     @Autowired
     private CoinPaymentsService coinPaymentsService;
     @Autowired

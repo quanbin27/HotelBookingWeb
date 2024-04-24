@@ -46,7 +46,20 @@
                                     <li><a href="/rooms">rooms</a></li>
                                     <li><a href="/about">About</a></li>
                                     <li><a href="/contact">Contact</a></li>
-                                    <li><a href="/signin">Sign in</a></li>
+                                    <div class="nav-links" style="text-align: center;">
+                                        <li>
+                                            <a href="#" class="desktop-item" >Menu</a>
+                                            <ul class="drop-menu" style="left: 2%;font-size: 6px;color: #f2f2f2;">
+
+                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Profile</a>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/profile}">Profile</a></li>
+                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Booking History</a>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/bookinghistory}">Booking History</a></li>
+                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Log out</a></li>
+                                            </ul>
+                                        </li>
+                                    </div>
                                 </ul>
                             </nav>
                         </div>
