@@ -44,7 +44,7 @@
                                 <ul id="navigation">
                                     <li><a href="/home">home</a></li>
                                     <li><a href="/rooms">rooms</a></li>
-                                    <li><a class="active" href="/about">About</a></li>
+                                    <li><a href="/about">About</a></li>
                                     <li><a href="/contact">Contact</a></li>
 
 
@@ -95,31 +95,45 @@
     <h3>Booking History</h3>
 </div>
 <!-- bradcam_area_end -->
-<table >
-    <tr>
-        <th>Mã Phiếu Đặt</th>
-        <th>Ngày Bắt Đầu</th>
-        <th>Ngày Kết Thúc</th>
-        <th>check</th>
-        <!-- Thêm các cột khác nếu cần -->
-    </tr>
-    <!-- Duyệt qua danh sách phiếu đặt -->
-    <tr th:each="phieuDat : ${listphieudat}">
-        <form action="/booking-info" method="post">
-            <input type="hidden" name="maPD" th:value="${phieuDat.getMaPD()}">
-            <td th:text="${phieuDat.getMaPD()}"></td>
-            <td th:text="${phieuDat.getTrangThai()}"></td>
-            <td th:text="${phieuDat.getNgayDat()}"></td>
-            <td><button type="submit" >Check</button></td>
-        </form>
+<div class="content">
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-striped custom-table">
+                <thead>
+                <tr>
+                    <th scope="col">Mã PD</th>
+                    <th scope="col">Ngày Đặt</th>
+                    <th scope="col">Ngày Nhận Phòng</th>
+                    <th scope="col">Ngày Trả Phòng</th>
+                    <th scope="col">Trạng Thái</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr scope="row" th:each="phieuDat : ${listphieudat}">
+                    <form action="/booking-info" method="post">
+                        <input type="hidden" name="maPD" th:value="${phieuDat.getMaPD()}">
+                        <td th:text="${phieuDat.getMaPD()}"></td>
+                        <td th:text="${phieuDat.getNgayDat()}"></td>
+                        <td th:text="${phieuDat.getNgayBD()}"></td>
+                        <td th:text="${phieuDat.getNgayTra()}"></td>
+                        <td th:text="${phieuDat.getTrangThai()}"></td>
+                        <td><button type="submit" >Chi tiết</button></td> 
+                    </form>
 
-        <!-- Thêm các cột khác nếu cần -->
-    </tr>
-</table>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+
+</div>
 
 <!-- footer -->
-<footer class="footer" >
-    <div id="redbutton"class="footer_top">
+<footer class="footer">
+    <div class="footer_top">
         <div class="container">
             <div class="row">
                 <div class="col-xl-3 col-md-6 col-lg-3">
@@ -127,9 +141,9 @@
                         <h3 class="footer_title">
                             address
                         </h3>
-                        <p class="footer_text" >  200, Green road, Mongla, <br>
-                            New Yor City USA</p>
-                        <a href="#" class="line-button">Get Direction</a>
+                        <p class="footer_text"> 97 Man Thien, Thu Duc City <br>
+                            Ho Chi Minh City</p>
+                        <a href="https://www.google.com/maps/place/Posts+and+Telecommunications+Institute+of+Technology+HCM+Branch/@10.8479923,106.7840844,17z/data=!3m1!4b1!4m6!3m5!1s0x31752772b245dff1:0xb838977f3d419d!8m2!3d10.847987!4d106.7866647!16s%2Fm%2F0119w781?entry=ttu" class="line-button">Get Direction</a>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6 col-lg-3">
@@ -137,7 +151,7 @@
                         <h3 class="footer_title">
                             Reservation
                         </h3>
-                        <p class="footer_text" >+10 367 267 2678 <br>
+                        <p class="footer_text">+84 365899252 <br>
                             reservation@montana.com</p>
                     </div>
                 </div>
@@ -147,10 +161,10 @@
                             Navigation
                         </h3>
                         <ul>
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Rooms</a></li>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">News</a></li>
+                            <li><a href="/home">Home</a></li>
+                            <li><a href="/rooms">Rooms</a></li>
+                            <li><a href="/about">About</a></li>
+                            <li><a href="/contact">Contact</a></li>
                         </ul>
                     </div>
                 </div>
@@ -161,7 +175,7 @@
                         </h3>
                         <form action="#" class="newsletter_form">
                             <input type="text" placeholder="Enter your mail">
-                            <button type="submit" >Sign Up</button>
+                            <button type="submit">Sign Up</button>
                         </form>
                         <p class="newsletter_text">Subscribe newsletter to get updates</p>
                     </div>
@@ -175,26 +189,23 @@
             <div class="row">
                 <div class="col-xl-8 col-md-7 col-lg-9">
                     <p class="copy_right">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </p>
+                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
                 </div>
                 <div class="col-xl-4 col-md-5 col-lg-3">
                     <div class="socail_links">
                         <ul>
                             <li>
-                                <a href="#">
+                                <a href="https://www.facebook.com/accbin1/">
                                     <i class="fa fa-facebook-square"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="https://twitter.com/n21dccn068">
                                     <i class="fa fa-twitter"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="https://twitter.com/n21dccn068">
                                     <i class="fa fa-instagram"></i>
                                 </a>
                             </li>
@@ -205,75 +216,9 @@
         </div>
     </div>
 </footer>
-<script>
-    // Tính toán ngày hôm nay
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var yyyy = today.getFullYear();
-    today = yyyy + '-' + mm + '-' + dd;
-
-    // Tính toán ngày mai
-    var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    var dd_tomorrow = String(tomorrow.getDate()).padStart(2, '0');
-    var mm_tomorrow = String(tomorrow.getMonth() + 1).padStart(2, '0');
-    var yyyy_tomorrow = tomorrow.getFullYear();
-    tomorrow = yyyy_tomorrow + '-' + mm_tomorrow + '-' + dd_tomorrow;
-
-    // Gán giá trị tối thiểu cho trường ngày check out
-    document.getElementById("checkout").setAttribute("min", tomorrow);
-    document.getElementById("checkin").setAttribute("min", today);
-</script>
 <!-- footer_end -->
 
-<!--&lt;!&ndash;     form itself end&ndash;&gt;-->
-<!--    <form id="test-form" class="white-popup-block mfp-hide">-->
-<!--        <div class="popup_box ">-->
-<!--                <div class="popup_inner">-->
-<!--                    <h3>Check Availability</h3>-->
-<!--                    <form action="#">-->
-<!--                        <div class="row">-->
-<!--                            <div class="col-xl-6">-->
-<!--                                <input id="datepicker" placeholder="Check in date">-->
-<!--                            </div>-->
-<!--                            <div class="col-xl-6">-->
-<!--                                <input id="datepicker2" placeholder="Check out date">-->
-<!--                            </div>-->
-<!--                            <div class="col-xl-6">-->
-<!--                                <select class="form-select wide" id="adult" class="">-->
-<!--                                    <option data-display="Adult">1</option>-->
-<!--                                    <option value="1">2</option>-->
-<!--                                    <option value="2">3</option>-->
-<!--                                    <option value="3">4</option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                            <div class="col-xl-6">-->
-<!--                                <select class="form-select wide" id="children" class="">-->
-<!--                                    <option data-display="Children">1</option>-->
-<!--                                    <option value="1">2</option>-->
-<!--                                    <option value="2">3</option>-->
-<!--                                    <option value="3">4</option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                            <div class="col-xl-12">-->
-<!--                                <select class="form-select wide" id="roomtype" class="">-->
-<!--                                    <option data-display="Room type">Room type</option>-->
-<!--                                    <option value="1">Laxaries Rooms</option>-->
-<!--                                    <option value="2">Deluxe Room</option>-->
-<!--                                    <option value="3">Signature Room</option>-->
-<!--                                    <option value="4">Couple Room</option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                            <div class="col-xl-12">-->
-<!--                                <button type="submit" class="boxed-btn3">Check Availability</button>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--    </form>-->
-<!--&lt;!&ndash; form itself end&ndash;&gt;-->
+
 
 
 <!-- JS here -->
