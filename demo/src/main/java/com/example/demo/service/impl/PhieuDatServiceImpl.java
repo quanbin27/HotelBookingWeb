@@ -27,9 +27,15 @@ public class PhieuDatServiceImpl implements IPhietDatService {
     public List<PhieuDat> findAllById(Iterable<String> strings) {
         return phieuDatRepository.findAllById(strings);
     }
+    @Override
+    public List<PhieuDat> findByKhachHangCCCD(String khachHangCCCD){
+        return phieuDatRepository.findByKhachHangCCCD(khachHangCCCD);
+    }
 
-
-
+    @Override
+    public PhieuDat save(PhieuDat phieuDat){
+        return phieuDatRepository.save(phieuDat);
+    }
     @Override
     public Optional<PhieuDat> findById(String s) {
         return phieuDatRepository.findById(s);

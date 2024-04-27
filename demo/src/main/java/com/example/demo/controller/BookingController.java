@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
-import com.example.demo.service.impl.CoinPaymentsService;
+import com.example.demo.service.impl.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.json.JSONException;
@@ -30,16 +30,21 @@ import static com.example.demo.service.impl.CoinPaymentsService.generateHmac;
 
 @Controller
 public class BookingController {
+    private final PhieuDatServiceImpl phieuDatService;
+    private final HangPhongServiceImpl hangPhongService;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final LoaiPhongServiceImpl loaiPhongService;
     @Autowired
-    private LoaiPhongRepository loaiPhongRepository;
-    @Autowired
-    private HangPhongRepository hangPhongRepository;
-    @Autowired
-    private TaiKhoanRepository taiKhoanRepository;
+    public BookingController(PhieuDatServiceImpl phieuDatService, HangPhongServiceImpl hangPhongService, UserDetailsServiceImpl userDetailsService, LoaiPhongServiceImpl loaiPhongService) {
+        this.phieuDatService = phieuDatService;
+        this.hangPhongService = hangPhongService;
+        this.userDetailsService = userDetailsService;
+        this.loaiPhongService = loaiPhongService;
+    }
     @GetMapping("booking")
     public String booking(Model model, HttpSession session){
              Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-             TaiKhoan taiKhoan = taiKhoanRepository.findUserAccount(authentication.getName());
+             TaiKhoan taiKhoan = userDetailsService.findUserAccount(authentication.getName());
              PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
              if (bookingInfo==null){
                 bookingInfo=new PhieuDat();
@@ -50,7 +55,7 @@ public class BookingController {
                 session.setAttribute("bookingInfo",bookingInfo);
 
              }
-             List<LoaiPhong> loaiPhongs = loaiPhongRepository.findAll();
+             List<LoaiPhong> loaiPhongs = loaiPhongService.findAll();
              model.addAttribute("loaiphongs",loaiPhongs);
              model.addAttribute("checkinDate", bookingInfo.getNgayBD());
              model.addAttribute("checkoutDate", bookingInfo.getNgayTra());
@@ -62,8 +67,8 @@ public class BookingController {
                                      @RequestParam("checkOutDate") String checkOutDate,
                                      Model model, HttpSession session) {
         // Lấy danh sách hạng phòng cho loại phòng đã chọn
-        List<HangPhong> hangPhongs = hangPhongRepository.findByLoaiPhongMaLP(roomType);
-        List<LoaiPhong> loaiPhongs = loaiPhongRepository.findAll();
+        List<HangPhong> hangPhongs =hangPhongService.findByLoaiPhongMaLP(roomType);
+        List<LoaiPhong> loaiPhongs = loaiPhongService.findAll();
         model.addAttribute("loaiphongs",loaiPhongs);
         session.setAttribute("selectedRoomType", roomType);
         session.setAttribute("checkInDate", checkInDate);
@@ -107,7 +112,7 @@ public class BookingController {
             }
         }
         for (HangPhong hangPhong : hangPhongs){
-            int number=hangPhongRepository.getAvailableRoom(hangPhong.getMaHP(),checkInDate,checkInDate);
+            int number=hangPhongService.getAvailableRoom(hangPhong.getMaHP(),checkInDate,checkInDate);
             soLuongPhongTrong.put(hangPhong.getMaHP(),number);
         }
         model.addAttribute("soLuongPhongTrong",soLuongPhongTrong);
@@ -145,7 +150,7 @@ public class BookingController {
                     break;
                 }
             }
-            HangPhong selectedRoom = hangPhongRepository.findByMaHP(hangPhongId);
+            HangPhong selectedRoom = hangPhongService.findByMaHP(hangPhongId);
             // Nếu hạng phòng chưa tồn tại trong danh sách chi tiết phiếu đặt, thêm mới
             if (!found) {
                 ChiTietPhieuDat chiTietPhieuDat = new ChiTietPhieuDat();
@@ -167,7 +172,6 @@ public class BookingController {
     public String showBookingInfo(HttpSession session, Model model) {
         // Lấy thông tin phiếu đặt từ session
         PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
-        System.out.println(bookingInfo.getTrangThai()+"getbkif");
         maPD=bookingInfo.getMaPD();
 
         // Truyền thông tin phiếu đặt vào model để hiển thị trên trang HTML
@@ -178,7 +182,7 @@ public class BookingController {
     }
     @PostMapping("/booking-info")
     public String showBookingInfo(@RequestParam("maPD") String maPD,Model model){
-        Optional<PhieuDat> pd = phieuDatRepository.findById(maPD);
+        Optional<PhieuDat> pd=phieuDatService.findById(maPD);
         PhieuDat bookingInfo = pd.get();
         model.addAttribute("bookingInfo",bookingInfo);
         return "booking-info-success";
@@ -187,7 +191,7 @@ public class BookingController {
     public String showBookingInfoSuccess(HttpSession session, Model model) {
         // Lấy thông tin phiếu đặt từ session
         PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
-        Optional<PhieuDat> pd=phieuDatRepository.findById(bookingInfo.getMaPD());
+        Optional<PhieuDat> pd=phieuDatService.findById(bookingInfo.getMaPD());
         session.removeAttribute("bookingInfo");
         session.removeAttribute("checkInDate");
         session.removeAttribute("checkOutDate");
@@ -199,16 +203,12 @@ public class BookingController {
     private String maPD;
     @Autowired
     private CoinPaymentsService coinPaymentsService;
-    @Autowired
-    private PhieuDatRepository phieuDatRepository;
-    @Autowired
-    private ChiTietPhieuDatRepository chiTietPhieuDatRepository;
     @PostMapping("/process-payment")
     @ResponseBody
     public String processPayment(HttpSession session) {
         System.out.println("Ma PD:" +maPD);
         PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
-        System.out.println("chuyen toi checkoutcoin");
+        System.out.println("chuyen toi checkout coin");
         try {
             String transactionResult = coinPaymentsService.createFixedPricePayment(1,"LTCT","LTCT","votrungquan2002@gmail.com",bookingInfo.getKhachHang().getTen(),bookingInfo.getMaPD());
             System.out.println(transactionResult);
@@ -221,7 +221,7 @@ public class BookingController {
                 // Lấy giá trị của trường "checkout_url" từ đối tượng JSON con "result"
                 String checkoutUrl = resultObject.getString("checkout_url");
                 System.out.println(checkoutUrl + "link url");
-                phieuDatRepository.save(bookingInfo);
+                phieuDatService.save(bookingInfo);
                 return checkoutUrl;
 
         } catch (Exception e) {
@@ -283,15 +283,15 @@ public class BookingController {
             System.out.println("da get ipn_type:"+ipnType);
             if ("api".equals(ipnType)) {
                 String status = dataMap.get("status");
-                Optional<PhieuDat> phieuDat=phieuDatRepository.findById(maPD);
+                Optional<PhieuDat> phieuDat=phieuDatService.findById(maPD);
                 if (phieuDat.isPresent()) {
                     PhieuDat phieu = phieuDat.get();
                     if ( status.equals("100")||status.equals("2")) {
                         phieu.setTrangThai("Da Thanh Toan");
-                        phieuDatRepository.save(phieu);
+                        phieuDatService.save(phieu);
                     }
                     else if ( status.equals("-1")) {
-                        phieuDatRepository.delete(phieu);
+                        phieuDatService.delete(phieu);
                     }
                 }
             }

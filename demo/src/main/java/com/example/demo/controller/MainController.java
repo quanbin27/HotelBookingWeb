@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTO.KieuPhongDTO;
+import com.example.demo.entity.KieuPhong;
+import com.example.demo.service.IKieuPhongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,11 +13,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Controller
 public class MainController {
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    IKieuPhongService kieuPhongService;
     @ModelAttribute("isLoggedIn")
     public boolean isLoggedIn() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -38,5 +46,11 @@ public class MainController {
     public String about(){
         return "about";
     }
-
+    @RequestMapping("rooms")
+    public String rooms(Model model){
+        List<KieuPhong> kieuphongs=kieuPhongService.findAll();
+        List<KieuPhongDTO> kieuphongDTOs = new ArrayList<>();
+        model.addAttribute("listkieuphong",kieuphongs);
+        return "rooms";
+    }
 }

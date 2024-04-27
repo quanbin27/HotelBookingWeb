@@ -18,7 +18,18 @@ public class HangPhongServiceImpl implements IHangPhongService {
     public HangPhongServiceImpl(HangPhongRepository hangPhongRepository) {
         this.hangPhongRepository = hangPhongRepository;
     }
-
+    @Override
+    public List<HangPhong> findByLoaiPhongMaLP(String maLP){
+        return hangPhongRepository.findByLoaiPhongMaLP(maLP);
+    }
+    @Override
+    public HangPhong findByMaHP(String maHP){
+        return hangPhongRepository.findByMaHP(maHP);
+    }
+    @Override
+    public int getAvailableRoom(String mahp,String tungay,String denngay){
+        return hangPhongRepository.getAvailableRoom(mahp,tungay,denngay);
+    }
     @Override
     public List<HangPhong> findAll() {
         return hangPhongRepository.findAll();

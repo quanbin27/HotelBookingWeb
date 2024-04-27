@@ -20,6 +20,7 @@ public interface IPhietDatService {
     void delete(PhieuDat entity);
 
     void deleteAllById(Iterable<? extends String> strings);
-
+    List<PhieuDat> findByKhachHangCCCD(String khachHangCCCD);
     void deleteAll();
+    PhieuDat save(PhieuDat phieuDat);
 }

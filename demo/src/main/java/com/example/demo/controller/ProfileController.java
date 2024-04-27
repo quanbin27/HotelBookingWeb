@@ -3,13 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.entity.KhachHang;
 import com.example.demo.entity.PhieuDat;
 import com.example.demo.entity.TaiKhoan;
-import com.example.demo.repository.KhachHangRepository;
-import com.example.demo.repository.PhieuDatRepository;
-import com.example.demo.repository.TaiKhoanRepository;
+import com.example.demo.service.impl.PhieuDatServiceImpl;
 import com.example.demo.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -23,38 +19,31 @@ import java.util.List;
 
 @Controller
 public class ProfileController {
-    @Autowired
-    private KhachHangRepository khachhangRepository;
-    @Autowired
-    private TaiKhoanRepository taiKhoanRepository;
-
     private final UserDetailsServiceImpl userDetailsService;
+    private final PhieuDatServiceImpl phieuDatServiceImpl;
     @Autowired
-    private PhieuDatRepository phieuDatRepository;
-
-    @Autowired
-    public ProfileController(UserDetailsServiceImpl userDetailsService){
+    public ProfileController(UserDetailsServiceImpl userDetailsService,PhieuDatServiceImpl phieuDatServiceImpl){
         this.userDetailsService=userDetailsService;
+        this.phieuDatServiceImpl=phieuDatServiceImpl;
     }
     @RequestMapping("profile")
     public String profile(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        TaiKhoan taiKhoan = taiKhoanRepository.findUserAccount(authentication.getName());
+        TaiKhoan taiKhoan =userDetailsService.findUserAccount(authentication.getName());
         KhachHang khachHang = taiKhoan.getKhachHang();
-        khachHang=khachhangRepository.findByCCCD(khachHang.getCCCD());
+        khachHang=userDetailsService.findByCCCD(khachHang.getCCCD());
         model.addAttribute("khachhang",khachHang);
         return "profile";
     }
     @PostMapping("/update-profile")
     public String updateProfile(@ModelAttribute("khachhang") KhachHang khachHang) {
-        System.out.println(khachHang.getHo());
-        khachhangRepository.merge(khachHang);
+        userDetailsService.merge(khachHang);
         return "redirect:/profile";
     }
     @PostMapping("/change-password")
     public String changePassword(@RequestParam("old-password") String currentPassword, @RequestParam("new-password") String newPassword, @RequestParam("confirm-password") String confirmPassword, RedirectAttributes redirectAttributes){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        TaiKhoan taiKhoan = taiKhoanRepository.findUserAccount(authentication.getName());
+        TaiKhoan taiKhoan = userDetailsService.findUserAccount(authentication.getName());
         PasswordEncoder passwordEncoder= PasswordEncoderFactories.createDelegatingPasswordEncoder();
         if (!newPassword.equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("error", "New password and confirm password do not match.");
@@ -71,8 +60,8 @@ public class ProfileController {
     @GetMapping("/bookinghistory")
     public String bookingHistory(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        TaiKhoan taiKhoan = taiKhoanRepository.findUserAccount(authentication.getName());
-        List<PhieuDat> phieuDatList=phieuDatRepository.findByKhachHangCCCD(taiKhoan.getKhachHang().getCCCD());
+        TaiKhoan taiKhoan = userDetailsService.findUserAccount(authentication.getName());
+        List<PhieuDat> phieuDatList=phieuDatServiceImpl.findByKhachHangCCCD(taiKhoan.getKhachHang().getCCCD());
         model.addAttribute("listphieudat",phieuDatList);
         return "bookinghistory";
     }

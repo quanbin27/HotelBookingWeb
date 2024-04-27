@@ -24,4 +24,7 @@ public interface IHangPhongService {
     void deleteAll();
 
     List<HangPhong> findAll(Sort sort);
+    List<HangPhong> findByLoaiPhongMaLP(String maLP);
+    int getAvailableRoom(String mahp,String tungay,String denngay);
+    HangPhong findByMaHP(String maHP);
 }

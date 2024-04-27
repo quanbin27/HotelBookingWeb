@@ -3,8 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.DTO.TaiKhoanKhachHangDTO;
 import com.example.demo.entity.KhachHang;
 import com.example.demo.entity.TaiKhoan;
-import com.example.demo.repository.KhachHangRepository;
-import com.example.demo.repository.TaiKhoanRepository;
 import com.example.demo.service.impl.UserDetailsServiceImpl;
 import com.example.demo.utils.RandomStringUtil;
 import jakarta.mail.MessagingException;
@@ -38,11 +36,6 @@ import static com.example.demo.utils.EncrytedPasswordUtils.encrytePassword;
 
 @Controller
 public class AccountController {
-    @Autowired
-    private KhachHangRepository khachhangRepository;
-    @Autowired
-    private TaiKhoanRepository taiKhoanRepository;
-
     private final UserDetailsServiceImpl userDetailsService;
     @Autowired
     public AccountController(UserDetailsServiceImpl userDetailsService){
@@ -64,10 +57,8 @@ public class AccountController {
     @GetMapping("signup")
     public  String signup(@ModelAttribute TaiKhoanKhachHangDTO taiKhoanKhachHangDTO, Model model){
         model.addAttribute("taiKhoanKhachHangDTO",taiKhoanKhachHangDTO);
-        System.out.println("vao signup");
         return "sign_up";
     }
-    private static final Logger log = LoggerFactory.getLogger(RoomsController.class);
     @PostMapping("signup")
     public String returnHome(@Valid TaiKhoanKhachHangDTO taiKhoanKhachHangDTO, BindingResult bindingResult){
         System.out.println(taiKhoanKhachHangDTO.toString());
@@ -75,12 +66,8 @@ public class AccountController {
             bindingResult.addError(new FieldError("taiKhoanKhachHangDTO","Username","Username already in use"));
         }
         if (bindingResult.hasErrors()){
-            System.out.println("co loi");
-            System.out.println("co loi"+bindingResult.toString());
             return "sign_up";
         }
-        System.out.println("ko loi");
-        log.info("----UserDTO:",taiKhoanKhachHangDTO.toString());
         taiKhoanKhachHangDTO.setEncrytedPassword(encrytePassword(taiKhoanKhachHangDTO.getEncrytedPassword()));
         userDetailsService.register(taiKhoanKhachHangDTO);
         return "redirect:signin";
@@ -103,15 +90,13 @@ public class AccountController {
         String username = request.getParameter("username");
         String token = RandomStringUtil.generateRandomString(30);
         try {
-            System.out.println("vao update");
             userDetailsService.updateResetPasswordToken(token, username);
-            TaiKhoan taiKhoan=taiKhoanRepository.findUserAccount(username);
-            System.out.println(taiKhoan.getKhachHang().getCCCD());
-            KhachHang khachHang=khachhangRepository.findByCCCD(taiKhoan.getKhachHang().getCCCD());
+            TaiKhoan taiKhoan=userDetailsService.findUserAccount(username);
+            KhachHang khachHang=userDetailsService.findByCCCD(taiKhoan.getKhachHang().getCCCD());
             System.out.println(khachHang.getEmail());
             String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password?token=" + token;
             sendEmail(khachHang.getEmail(),resetPasswordLink);
-            System.out.println("da gui");
+            System.out.println("da gui mail ");
             model.addAttribute("success", "We have sent a reset password link to your email. Please check.");
 
         } catch (UsernameNotFoundException ex) {

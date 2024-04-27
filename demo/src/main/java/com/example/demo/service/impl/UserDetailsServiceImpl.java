@@ -9,6 +9,8 @@ import com.example.demo.repository.KhachHangRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.TaiKhoanRepository;
 import com.example.demo.repository.UserRoleRepository;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,7 +37,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private KhachHangRepository khachHangRepository;
     @Autowired
     private UserRoleRepository userRoleRepository;
-
+    public TaiKhoan findUserAccount(String Username){
+        return taiKhoanRepository.findUserAccount(Username);
+    }
+    public KhachHang findByCCCD(String CCCD){
+        return khachHangRepository.findByCCCD(CCCD);
+    }
+    public void merge(KhachHang khachHang){
+        khachHangRepository.merge(khachHang);
+    }
     public UserDetails loadUserByUsername(String UserName) throws UsernameNotFoundException{
         TaiKhoan taiKhoan=this.taiKhoanRepository.findUserAccount(UserName);
         if (taiKhoan==null){
