@@ -176,7 +176,19 @@
                 <form action="/booking" method="get" style="display: inline-block">
                     <button  type="submit" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3">Đặt thêm phòng</button>
                 </form>
-                <button onclick="processPayment()" type="button" class="btn btn-lg btn-primary mt-2">Thanh toán</button>
+                <form class="btn btn-lg mt-2" action="https://www.coinpayments.net/index.php" method="post">
+                    <input type="hidden" name="cmd" value="_pay_simple">
+                    <input type="hidden" name="reset" value="1">
+                    <input type="hidden" name="merchant" value="d38af4bb3e25d61522280a5de92f92e4">
+                    <input type="hidden" name="item_name" th:value="${bookingInfo.getMaPD()}">
+                    <input type="hidden" name="currency" value="VND">
+                    <input type="hidden" name="amountf" th:value="${bookingInfo.getTongTien()}">
+                    <input type="hidden" name="allow_currencies" value="BTC,LTC,XRP,TRX,USDC,ETC,USDT.TRC20,LTCT">
+                    <input type="image" src="https://www.coinpayments.net/images/pub/buynow-grey.png" alt="Buy Now with CoinPayments.net">
+                    <input type="hidden" name="cancel_url" value="http://localhost:8383/booking-info">
+                    <input type="hidden" name="success_url" value="http://localhost:8383/booking-info-success">
+                </form>
+<!--               <button onclick="processPayment()" type="button" class="btn btn-lg btn-primary mt-2">Thanh toán</button>-->
             </div>
 
         </div>

@@ -50,7 +50,7 @@ public class BookingController {
                 bookingInfo=new PhieuDat();
                 String maPD = UUID.randomUUID().toString().substring(1,7);
                 bookingInfo.setMaPD(maPD);
-                bookingInfo.setTrangThai("Chua Thanh Toan");
+                bookingInfo.setTrangThai("New");
                 bookingInfo.setKhachHang(taiKhoan.getKhachHang());
                 session.setAttribute("bookingInfo",bookingInfo);
 
@@ -162,8 +162,11 @@ public class BookingController {
             tongtien=tongtien+quantity*selectedRoom.getDonGia();
         }
         bookingInfo.setTongTien(tongtien);
+        System.out.println(bookingInfo.getChitietphieudats()+"<-CTPD");
+        phieuDatService.save(bookingInfo);
         // Lưu thông tin phiếu đặt đã cập nhật vào session
         session.setAttribute("bookingInfo", bookingInfo);
+
 
         return "redirect:/booking-info";
     }
@@ -172,8 +175,6 @@ public class BookingController {
     public String showBookingInfo(HttpSession session, Model model) {
         // Lấy thông tin phiếu đặt từ session
         PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
-        maPD=bookingInfo.getMaPD();
-
         // Truyền thông tin phiếu đặt vào model để hiển thị trên trang HTML
         model.addAttribute("bookingInfo", bookingInfo);
         model.addAttribute("checkInDate",session.getAttribute("checkInDate"));
@@ -200,44 +201,37 @@ public class BookingController {
         model.addAttribute("bookingInfo", phieuDat);
         return "booking-info-success"; // Trả về trang HTML để hiển thị thông tin phiếu đặt
     }
-    private String maPD;
     @Autowired
     private CoinPaymentsService coinPaymentsService;
-    @PostMapping("/process-payment")
-    @ResponseBody
-    public String processPayment(HttpSession session) {
-        System.out.println("Ma PD:" +maPD);
-        PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
-        System.out.println("chuyen toi checkout coin");
-        try {
-            String transactionResult = coinPaymentsService.createFixedPricePayment(1,"LTCT","LTCT","votrungquan2002@gmail.com",bookingInfo.getKhachHang().getTen(),bookingInfo.getMaPD());
-            System.out.println(transactionResult);
-
-                System.out.println("dung format");
-                JSONObject jsonObject = new JSONObject(transactionResult);
-                // Lấy đối tượng JSON con "result" từ đối tượng JSON chính
-
-                JSONObject resultObject = jsonObject.getJSONObject("result");
-                // Lấy giá trị của trường "checkout_url" từ đối tượng JSON con "result"
-                String checkoutUrl = resultObject.getString("checkout_url");
-                System.out.println(checkoutUrl + "link url");
-                phieuDatService.save(bookingInfo);
-                return checkoutUrl;
-
-        } catch (Exception e) {
-            System.err.println("Lỗi coinPaymentsService: " + e.getMessage());
-            return "payment-error: Unexpected error";
-        }
-    }
-    @GetMapping("/get-session")
-    public String getsession(HttpSession session) {
-        PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
-        System.out.println(bookingInfo.getMaPD());
-        return "redirect:/booking-info";
-    }
+//    @PostMapping("/process-payment")
+//    @ResponseBody
+//    public String processPayment(HttpSession session) {
+//        System.out.println("Ma PD:" +maPD);
+//        PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
+//        System.out.println("chuyen toi checkout coin");
+//        try {
+//            String transactionResult = coinPaymentsService.createFixedPricePayment(1,"LTCT","LTCT","votrungquan2002@gmail.com",bookingInfo.getKhachHang().getTen(),bookingInfo.getMaPD());
+//            System.out.println(transactionResult);
+//
+//                System.out.println("dung format");
+//                JSONObject jsonObject = new JSONObject(transactionResult);
+//                // Lấy đối tượng JSON con "result" từ đối tượng JSON chính
+//
+//                JSONObject resultObject = jsonObject.getJSONObject("result");
+//                // Lấy giá trị của trường "checkout_url" từ đối tượng JSON con "result"
+//                String checkoutUrl = resultObject.getString("checkout_url");
+//                System.out.println(checkoutUrl + "link url");
+//                phieuDatService.save(bookingInfo);
+//                return checkoutUrl;
+//
+//        } catch (Exception e) {
+//            System.err.println("Lỗi coinPaymentsService: " + e.getMessage());
+//            return "payment-error: Unexpected error";
+//        }
+//    }
     @PostMapping("/coinpayments-ipn")
-    public ResponseEntity<String> handleCoinPaymentsIPN(HttpServletRequest request, HttpSession session, RedirectAttributes redirectAttributes) {
-        System.out.println("da nhan IPN"+maPD);
+    public ResponseEntity<String> handleCoinPaymentsIPN(HttpServletRequest request) {
+        System.out.println("Da nhan IPN");
         try {
             // Lấy dữ liệu POST từ CoinPayments
             BufferedReader reader = request.getReader();
@@ -281,22 +275,24 @@ public class BookingController {
             }
             String ipnType = dataMap.get("ipn_type");
             System.out.println("da get ipn_type:"+ipnType);
-            if ("api".equals(ipnType)) {
+            if ("simple".equals(ipnType)) {
                 String status = dataMap.get("status");
-                Optional<PhieuDat> phieuDat=phieuDatService.findById(maPD);
-                if (phieuDat.isPresent()) {
-                    PhieuDat phieu = phieuDat.get();
-                    if ( status.equals("100")||status.equals("2")) {
-                        phieu.setTrangThai("Da Thanh Toan");
-                        phieuDatService.save(phieu);
-                    }
-                    else if ( status.equals("-1")) {
-                        phieuDatService.delete(phieu);
-                    }
+                String maPd= dataMap.get("item_name");
+                Optional<PhieuDat> pd=phieuDatService.findById(maPd);
+                PhieuDat phieuDat=pd.get();
+                if (status.equals("0")) {
+                    phieuDat.setTrangThai("Waiting for buyer funds");
+                    phieuDatService.save(phieuDat);
+                }
+                else if ( status.equals("100")||status.equals("2")) {
+                    phieuDat.setTrangThai("Payment Complete");
+                    phieuDatService.save(phieuDat);
+                }
+                else if ( status.equals("-1")) {
+                    phieuDat.setTrangThai("Cancelled / Timed Out");
+                    phieuDatService.save(phieuDat);
                 }
             }
-            // Trả về 200 OK để báo cho CoinPayments biết rằng IPN đã được xử lý thành công
-            System.out.println("tra ve 200");
             return ResponseEntity.ok("IPN processed successfully");
         } catch (IOException | JSONException e) {
             System.out.println("Json+IO"+e.getMessage());

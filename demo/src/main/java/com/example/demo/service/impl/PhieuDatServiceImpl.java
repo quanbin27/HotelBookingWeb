@@ -36,6 +36,10 @@ public class PhieuDatServiceImpl implements IPhietDatService {
     public PhieuDat save(PhieuDat phieuDat){
         return phieuDatRepository.save(phieuDat);
     }
+//    @Override
+//    public PhieuDat merge(PhieuDat phieuDat){
+//        return phieuDatRepository.merge(phieuDat);
+//    }
     @Override
     public Optional<PhieuDat> findById(String s) {
         return phieuDatRepository.findById(s);

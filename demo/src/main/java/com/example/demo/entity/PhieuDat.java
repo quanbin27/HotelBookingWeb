@@ -31,7 +31,7 @@ public class PhieuDat implements Serializable {
     private Date NgayTra;
     private String TrangThai;
     private double TongTien;
-    @OneToMany(mappedBy = "phieudat",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "phieudat", cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Builder.Default
     private Set<ChiTietPhieuDat> chitietphieudats= new HashSet<>();
 }

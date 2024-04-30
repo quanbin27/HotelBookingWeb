@@ -23,4 +23,5 @@ public interface IPhietDatService {
     List<PhieuDat> findByKhachHangCCCD(String khachHangCCCD);
     void deleteAll();
     PhieuDat save(PhieuDat phieuDat);
+   // PhieuDat merge(PhieuDat phieuDat);
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -36,6 +37,9 @@ public class TaiKhoan implements Serializable {
         this.khachHang.setCCCD(cccd);
         this.Enabled = enabled;
     }
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(Username);
+    }
 
 }
