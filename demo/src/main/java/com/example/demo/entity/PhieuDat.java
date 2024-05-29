@@ -7,9 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,4 +38,17 @@ public class PhieuDat implements Serializable {
     @OneToMany(mappedBy = "phieudat", cascade = {CascadeType.ALL}, orphanRemoval = true)
     @Builder.Default
     private Set<ChiTietPhieuDat> chitietphieudats= new HashSet<>();
+    public long getSoNgay() {
+        long diffInMillies = Math.abs(NgayTra.getTime() - NgayBD.getTime());
+        return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+    }
+    public double calculateTongTien() {
+        double total = 0;
+        long soNgay = getSoNgay();
+        for (ChiTietPhieuDat chiTiet : chitietphieudats) {
+            total += chiTiet.getSoLuong() * chiTiet.getHangphong().getDonGia() * soNgay;
+        }
+        this.TongTien = total;
+        return total;
+    }
 }

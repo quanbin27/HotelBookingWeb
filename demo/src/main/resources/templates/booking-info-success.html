@@ -24,6 +24,8 @@
     <link rel="stylesheet" th:href="@{/css/animate.css}">
     <link rel="stylesheet" th:href="@{/css/slicknav.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
+
     <style>
         table {
             width: 100%;
@@ -137,7 +139,10 @@
                     <tr th:each="chiTiet : ${bookingInfo.getChitietphieudats()}">
                         <td class="p-4">
                             <div class="media align-items-center">
-                                <img th:src="'data:image/png;base64,' + ${chiTiet.getHangphong().getKieuphong().getBase64Image()}" class="d-block ui-w-40 ui-bordered mr-4" alt="">
+                                <a th:href="'data:image/png;base64,' + ${chiTiet.getHangphong().getKieuphong().getBase64Image()}" class="popup-image">
+                                    <img th:src="'data:image/png;base64,' + ${chiTiet.getHangphong().getKieuphong().getBase64Image()}" class="d-block ui-w-40 ui-bordered mr-4" alt="">
+                                </a>
+
                                 <div class="media-body">
                                     <a href="#" class="d-block text-dark" th:text="${chiTiet.getHangphong().getKieuphong().getTenKP()}"></a>
                                     <a href="#" class="d-block text-dark" th:text="${chiTiet.getHangphong().getLoaiphong().getTenLP()}"></a>
@@ -160,7 +165,7 @@
                 <div class="d-flex">
                     <div class="text-right mt-4">
                         <label class="text-muted font-weight-normal m-0">Tổng cộng</label>
-                        <div class="text-large"><strong th:text="${bookingInfo.getTongTien()}"></strong></div>
+                        <div class="text-large"><strong th:text="${#numbers.formatDecimal(chiTiet.getSoLuong()*chiTiet.getHangphong().getDonGia()*bookingInfo.getSoNgay(),0,'COMMA',0,'POINT')}+'VND'"></strong></div>
                     </div>
                 </div>
             </div>
@@ -303,7 +308,15 @@
 
     });
 </script>
+<script th:src="@{js/jquery.magnific-popup.min.js}"></script>
 
+<script>
+    $(document).ready(function() {
+        $('.popup-image').magnificPopup({
+            type: 'image',
+        });
+    });
+</script>
 
 </body>
 

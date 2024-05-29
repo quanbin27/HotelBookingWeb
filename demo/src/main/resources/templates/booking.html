@@ -24,6 +24,8 @@
     <link rel="stylesheet" th:href="@{/css/animate.css}">
     <link rel="stylesheet" th:href="@{/css/slicknav.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
+
     <!-- <link rel="stylesheet" href="css/responsive.css"> -->
 </head>
 
@@ -109,13 +111,20 @@
         </select>
 
         <button type="submit" class="button-60">Show Room Categories</button>
+        <div th:if="${errorMessage}" style="color: red;">
+            <p th:text="${errorMessage}"></p>
+        </div>
     </form>
     <div th:if="${hangphongs}" class="container mt-5 mb-5" >
         <form th:action="@{/bookRoom}" method="post" style="margin-bottom: 30px;padding-bottom: 30px">
             <div class="d-flex justify-content-center row">
                 <ul class="col-md-10">
                     <li th:each="hangphong : ${hangphongs}" class="row p-2 bg-white border rounded">
-                        <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" th:src="'data:image/png;base64,' + ${hangphong.getKieuphong().getBase64Image()}"></div>
+                        <div class="col-md-3 mt-1">
+                            <a th:href="'data:image/png;base64,' + ${hangphong.getKieuphong().getBase64Image()}" class="popup-image">
+                                <img class=" img-fluid img-responsive rounded product-image" th:src="'data:image/png;base64,' + ${hangphong.getKieuphong().getBase64Image()}">
+                            </a>
+                        </div>
                         <div class="col-md-6 mt-1">
                             <h5 th:text="${hangphong.getKieuphong().getTenKP()}"></h5>
                             <div class="d-flex flex-row">
@@ -132,9 +141,11 @@
                         </div>
                         <div class="align-items-center align-content-center col-md-3 border-left mt-1">
                             <div class="d-flex flex-row align-items-center">
-                                <h4 class="mr-1" th:text="${hangphong.getDonGia()}"></h4><span class="strike-text">$20.99</span>
+                                <h4 class="mr-1" th:text="${hangphong.getDonGia()}+VND">
+
+<!--                                </h4><span class="strike-text">$20.99</span>-->
                             </div>
-                            <h6 class="text-success">Free shipping</h6>
+<!--                            <h6 class="text-success">Free shipping</h6>-->
                             <div class="d-flex flex-column mt-4"><input type="number" name="quantity" th:value="${soLuongDaDatMap[hangphong.maHP] != null ? soLuongDaDatMap[hangphong.maHP] : 0}" min="0" th:max="${soLuongPhongTrong[hangphong.maHP]}" ></div>
                         </div>
                         <input type="hidden" name="hangPhongId" th:value="${hangphong.maHP}">
@@ -297,6 +308,16 @@
 
         });
     </script>
+    <script th:src="@{js/jquery.magnific-popup.min.js}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.popup-image').magnificPopup({
+                type: 'image',
+            });
+        });
+    </script>
+
 
 
 </body>

@@ -65,6 +65,9 @@ public class AccountController {
         if (userDetailsService.userExists(taiKhoanKhachHangDTO.getUsername())) {
             bindingResult.addError(new FieldError("taiKhoanKhachHangDTO","Username","Username already in use"));
         }
+        if (userDetailsService.userExistsCCCD(taiKhoanKhachHangDTO.getCCCD())) {
+            bindingResult.addError(new FieldError("taiKhoanKhachHangDTO","CCCD","CCCD already in use"));
+        }
         if (bindingResult.hasErrors()){
             return "sign_up";
         }

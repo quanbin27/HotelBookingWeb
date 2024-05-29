@@ -36,7 +36,7 @@ public class TaiKhoanKhachHangDTO implements Serializable {
     //@NotBlank(message = "Enter your Phone Number")
     private String SDT;
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    //@DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Enter your Birthday")
     private Date NgaySinh;
     private String DiaChi;

@@ -16,7 +16,6 @@ public class TaiKhoanRepository {
     public TaiKhoan findUserAccount(String Username){
         try {
             String sql = "SELECT e.Username, e.EncrytedPassword, e.khachHang.CCCD, e.Enabled FROM " + TaiKhoan.class.getName() + " e WHERE e.Username = :Username";
-
             Query query=entityManager.createQuery(sql, TaiKhoan.class);
             query.setParameter("Username",Username);
             return (TaiKhoan) query.getSingleResult();
@@ -37,6 +36,11 @@ public class TaiKhoanRepository {
     public boolean existsByUsername(String username) {
         Query query = entityManager.createQuery("SELECT 1 FROM TaiKhoan t WHERE t.Username = :username");
         query.setParameter("username", username);
+        return query.getResultList().size() > 0;
+    }
+    public boolean existsByCCCD(String cccd) {
+        Query query = entityManager.createQuery("SELECT 1 FROM TaiKhoan t WHERE t.khachHang.CCCD = :cccd");
+        query.setParameter("cccd", cccd);
         return query.getResultList().size() > 0;
     }
 

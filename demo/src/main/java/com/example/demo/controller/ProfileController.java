@@ -60,8 +60,16 @@ public class ProfileController {
     @GetMapping("/bookinghistory")
     public String bookingHistory(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        double TongTienDaTra=0;
+        long TongSoNgay=0;
         TaiKhoan taiKhoan = userDetailsService.findUserAccount(authentication.getName());
         List<PhieuDat> phieuDatList=phieuDatServiceImpl.findByKhachHangCCCD(taiKhoan.getKhachHang().getCCCD());
+        for (PhieuDat phieudat: phieuDatList){
+            TongTienDaTra=TongTienDaTra+phieudat.getTongTien();
+            TongSoNgay=TongSoNgay+phieudat.getSoNgay();
+        }
+        model.addAttribute("tongtiendatra",TongTienDaTra);
+        model.addAttribute("tongsongay",TongSoNgay);
         model.addAttribute("listphieudat",phieuDatList);
         return "bookinghistory";
     }
