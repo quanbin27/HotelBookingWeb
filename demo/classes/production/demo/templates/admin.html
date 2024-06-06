@@ -24,45 +24,6 @@
     <link rel="stylesheet" th:href="@{/css/animate.css}">
     <link rel="stylesheet" th:href="@{/css/slicknav.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
-<<<<<<< HEAD
-    <script>
-        function saveAndPay(event) {
-            event.preventDefault(); // Ngăn chặn hành động mặc định của nút
-            fetch('/startPay', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    window.location.href = '/proceedToPayment';
-                } else {
-                    alert('Có lỗi xảy ra, vui lòng thử lại.');
-                }
-            });
-        }
-    </script>
-=======
-
->>>>>>> c51c79760a7a124f807962e3dfba52ddca981c9d
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .no-scientific-notation {
-        white-space: nowrap; /* Ngăn chặn ngắt dòng */
-        }
-    </style>
     <!-- <link rel="stylesheet" href="css/responsive.css"> -->
 </head>
 
@@ -85,16 +46,16 @@
                                     <li><a href="/rooms">rooms</a></li>
                                     <li><a class="active" href="/about">About</a></li>
                                     <li><a href="/contact">Contact</a></li>
-
-
                                     <div class="nav-links" style="text-align: center;">
                                         <li>
                                             <a href="#" class="desktop-item" >Menu</a>
                                             <ul class="drop-menu" style="left: 2%;font-size: 6px;color: #f2f2f2;">
-
-                                                <li><a th:href="@{/profile}">Profile</a></li>
-                                                <li><a th:href="@{/bookinghistory}">Booking History</a></li>
-                                                <li><a th:href="@{/logout}">Log out</a></li>
+                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Profile</a>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/profile}">Profile</a></li>
+                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Booking History</a>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/bookinghistory}">Booking History</a></li>
+                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Log out</a></li>
                                             </ul>
                                         </li>
                                     </div>
@@ -110,14 +71,12 @@
                         </div>
                     </div>
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
+                        <div class="sign_up" style="text-align: right;">
 
-                        <!--                            <div class="sign_up" style="text-align: right;">-->
-                        <!--                                -->
-                        <!--                                <div class="sign_btn d-none d-lg-block">-->
-                        <!--                                    <a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>-->
-                        <!--                                    <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Đăng xuất</a>-->
-                        <!--                                </div>-->
-                        <!--                            </div>-->
+                            <div class="sign_btn d-none d-lg-block">
+                                <a href="/signup">Sign Up</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-12">
                         <div class="mobile_menu d-block d-lg-none"></div>
@@ -130,125 +89,147 @@
 <!-- header-end -->
 
 <!-- bradcam_area_start -->
-<div class="bradcam_area breadcam_bg_2" style="padding: 145px 0 20px">
-    <h3>Booking Montana</h3>
+<div class="bradcam_area breadcam_bg">
+    <h3>ADMIN Montana</h3>
 </div>
+<!-- bradcam_area_end -->
 
-<div class="container px-3 my-5 clearfix">
-    <!-- Shopping cart table -->
-    <div class="card">
-        <div class="card-header">
-            <h2>Thông Tin Phiếu Đặt</h2>
-            <span>Mã PD: </span> <span th:text="${bookingInfo.getMaPD()}"></span>
-            <br>
-            <span>Trạng thái: </span> <span th:text="${bookingInfo.getTrangThai()}"></span><br>
-            <span>Ngày nhận phòng: </span> <span th:text="${checkInDate}"></span><br>
-            <span>Ngày trả phòng: </span> <span th:text="${checkOutDate}"></span>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered m-0">
-                    <thead>
-                    <tr >
-                        <!-- Set columns width -->
-                        <th class="text-center py-3 px-4" style="min-width: 400px;">Hạng Phòng</th>
-                        <th class="text-right py-3 px-4" style="width: 100px;">Giá</th>
-                        <th class="text-center py-3 px-4" style="width: 120px;">Số Lượng</th>
-                        <th class="text-center py-3 px-4" style="width: 120px;">Số Ngày</th>
-                        <th class="text-right py-3 px-4" style="width: 100px;">Tổng</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tr th:each="chiTiet : ${bookingInfo.getChitietphieudats()}">
-                        <td class="p-4">
-                            <div class="media align-items-center">
-                                <a th:href="'data:image/png;base64,' + ${chiTiet.getHangphong().getKieuphong().getBase64Image()}" class="popup-image"><img th:src="'data:image/png;base64,' + ${chiTiet.getHangphong().getKieuphong().getBase64Image()}" class="d-block ui-w-40 ui-bordered mr-4" alt=""></a>
-
-                                <div class="media-body">
-                                    <a href="#" class="d-block text-dark" th:text="${chiTiet.getHangphong().getKieuphong().getTenKP()}"></a>
-                                    <a href="#" class="d-block text-dark" th:text="${chiTiet.getHangphong().getLoaiphong().getTenLP()}"></a>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-right font-weight-semibold align-middle p-4" th:text="${#numbers.formatDecimal(chiTiet.getHangphong().getDonGia(),0,'COMMA',0,'POINT')}+'VND'"></td>
-                        <td class="align-middle p-4" th:text="${chiTiet.getSoLuong()}"></td>
-                        <td class="align-middle p-4" th:text="${bookingInfo.getSoNgay()}"></td>
-                        <td class="text-right font-weight-semibold align-middle p-4" th:text="${#numbers.formatDecimal(chiTiet.getSoLuong()*chiTiet.getHangphong().getDonGia()*bookingInfo.getSoNgay(),0,'COMMA',0,'POINT')}+'VND'"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- / Shopping cart table -->
-
-            <div class="d-flex flex-wrap justify-content-between align-items-center pb-4">
-                <div class="mt-4">
-                    <label id="payed-note" class="text-muted font-weight-normal" style="margin-bottom: 0px;display: none">*Ấn vào bên dưới sau khi thanh toán</label>
-                </div>
-                <div class="d-flex">
-                    <div class="text-right mt-4">
-                        <label class="text-muted font-weight-normal m-0">Tổng cộng</label>
-                        <div class="text-large no-scientific-notation">
-                            <strong th:text="${#numbers.formatDecimal(bookingInfo.getTongTien(),0,'COMMA',0,'POINT')}+'VND'"></strong>
-                        </div>
+<!-- about_area_start -->
+<div class="about_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-5 col-lg-5">
+                <div class="about_info">
+                    <div class="section_title mb-20px">
+                        <span>About Us</span>
+                        <h3>A Luxuries Hotel <br>
+                            with Nature</h3>
                     </div>
-
-
+                    <p>Suscipit libero pretium nullam potenti. Interdum, blandit phasellus consectetuer dolor ornare dapibus enim ut tincidunt rhoncus tellus sollicitudin pede nam maecenas, dolor sem. Neque sollicitudin enim. Dapibus lorem feugiat facilisi faucibus et. Rhoncus.</p>
+                    <a href="#" class="line-button">Learn More</a>
                 </div>
             </div>
-            <div class="float-left">
-                <form action="/booking-info-success" method="get">
-                    <button id="payed" type="submit" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3" style="display: none">Đã thanh toán</button>
-                </form>
+            <div class="col-xl-7 col-lg-7">
+                <div class="about_thumb d-flex">
+                    <div class="img_1">
+                        <img src="img/about/about_1.png" alt="">
+                    </div>
+                    <div class="img_2">
+                        <img src="img/about/about_2.png" alt="">
+                    </div>
+                </div>
             </div>
-            <div class="float-right">
-                <form action="/cancelbooking" method="post" style="display: inline-block">
-                    <button  type="submit" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3">Hủy Phiếu Đặt</button>
-                </form>
-                <form action="/booking" method="get" style="display: inline-block">
-                    <button  type="submit" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3">Đặt thêm phòng</button>
-                </form>
-                <form class="btn btn-lg mt-2" id="paymentForm" method="post">
-                    <input type="hidden" name="cmd" value="_pay_simple">
-                    <input type="hidden" name="reset" value="1">
-                    <input type="hidden" name="merchant" value="d38af4bb3e25d61522280a5de92f92e4">
-                    <input type="hidden" name="item_name" th:value="${bookingInfo.getMaPD()}">
-                    <input type="hidden" name="currency" value="VND">
-                    <input type="hidden" name="amountf" th:value="${bookingInfo.getTongTien()}">
-                    <input type="hidden" name="allow_currencies" value="BTC,LTC,XRP,TRX,USDC,ETC,USDT.TRC20,LTCT,BNB.BSC">
-                    <input type="image" src="https://www.coinpayments.net/images/pub/buynow-grey.png" alt="Buy Now with CoinPayments.net" onclick="saveAndPay(event);">
-                    <input type="hidden" name="cancel_url" value="http://localhost:8383/booking-info">
-                    <input type="hidden" name="success_url" value="http://localhost:8383/booking-info-success">
-                </form>
-
-            </div>
-
         </div>
     </div>
 </div>
-<script>
-    function processPayment() {
-        // Tạo một đối tượng XMLHttpRequest để gửi yêu cầu POST đến /process-payment
-        var xhr = new XMLHttpRequest();
-        document.getElementById("payed").style.display = "block";
-        document.getElementById("payed-note").style.display = "block";
-        xhr.open("POST", "/process-payment", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+<!-- about_area_end -->
 
-        // Xử lý khi nhận được phản hồi từ /process-payment
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                // Nhận URL thanh toán từ phản hồi
-                var checkoutUrl = xhr.responseText;
-                // Mở tab mới và chuyển hướng đến URL thanh toán
-                window.open(checkoutUrl, '_blank');
-            }
-        };
+<!-- about_info_area_start -->
+<div class="about_info_area">
+    <div class="about_active owl-carousel">
+        <div class="single_slider about_bg_1"></div>
+        <div class="single_slider about_bg_1"></div>
+        <div class="single_slider about_bg_1"></div>
+        <div class="single_slider about_bg_1"></div>
+    </div>
+</div>
+<!-- about_info_area_start -->
 
-        // Gửi yêu cầu POST không có dữ liệu
-        xhr.send();
-    }
-</script>
+<!-- about_main_info_start -->
+<div class="about_main_info">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6 col-md-6">
+                <div class="single_about_info">
+                    <h3>We Serve Fresh and <br>
+                        Delicious Food</h3>
+                    <p>Suscipit libero pretium nullam potenti. Interdum, blandit <br> phasellus consectetuer dolor ornare dapibus enim ut tincidunt <br> rhoncus tellus sollicitudin pede nam maecenas, dolor sem. <br> Neque sollicitudin enim. Dapibus lorem feugiat facilisi <br> faucibus et. Rhoncus.
+                    </p>
+                </div>
+            </div>
+            <div class="col-xl-6 col-md-6">
+                <div class="single_about_info">
+                    <h3>We Serve Fresh and <br>
+                        Delicious Food</h3>
+                    <p>Suscipit libero pretium nullam potenti. Interdum, blandit <br> phasellus consectetuer dolor ornare dapibus enim ut tincidunt <br> rhoncus tellus sollicitudin pede nam maecenas, dolor sem. <br> Neque sollicitudin enim. Dapibus lorem feugiat facilisi <br> faucibus et. Rhoncus.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- about_main_info_end -->
+
+<!-- forQuery_start -->
+<div class="forQuery">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1 col-md-12">
+                <div class="Query_border">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-xl-6 col-md-6">
+                            <div class="Query_text">
+                                <p>For Reservation 0r Query?</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-6">
+                            <div class="phone_num">
+                                <a href="#" class="mobile_no">+10 576 377 4789</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- forQuery_end-->
+
+<!-- instragram_area_start -->
+<div class="instragram_area">
+    <div class="single_instagram">
+        <img src="img/instragram/1.png" alt="">
+        <div class="ovrelay">
+            <a href="#">
+                <i class="fa fa-instagram"></i>
+            </a>
+        </div>
+    </div>
+    <div class="single_instagram">
+        <img src="img/instragram/2.png" alt="">
+        <div class="ovrelay">
+            <a href="#">
+                <i class="fa fa-instagram"></i>
+            </a>
+        </div>
+    </div>
+    <div class="single_instagram">
+        <img src="img/instragram/3.png" alt="">
+        <div class="ovrelay">
+            <a href="#">
+                <i class="fa fa-instagram"></i>
+            </a>
+        </div>
+    </div>
+    <div class="single_instagram">
+        <img src="img/instragram/4.png" alt="">
+        <div class="ovrelay">
+            <a href="#">
+                <i class="fa fa-instagram"></i>
+            </a>
+        </div>
+    </div>
+    <div class="single_instagram">
+        <img src="img/instragram/5.png" alt="">
+        <div class="ovrelay">
+            <a href="#">
+                <i class="fa fa-instagram"></i>
+            </a>
+        </div>
+    </div>
+</div>
+<!-- instragram_area_end -->
+
 <!-- footer -->
 <footer class="footer">
     <div class="footer_top">
@@ -337,6 +318,8 @@
 <!-- footer_end -->
 
 
+
+
 <!-- JS here -->
 <script th:src="@{js/vendor/modernizr-3.5.0.min.js}"></script>
 <script th:src="@{js/vendor/jquery-1.12.4.min.js}"></script>
@@ -379,15 +362,7 @@
 
     });
 </script>
-<script th:src="@{js/jquery.magnific-popup.min.js}"></script>
 
-<script>
-    $(document).ready(function() {
-        $('.popup-image').magnificPopup({
-            type: 'image',
-        });
-    });
-</script>
 
 </body>
 
