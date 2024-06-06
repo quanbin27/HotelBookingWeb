@@ -39,30 +39,11 @@ public class WebSecurityConfig {
         ProviderManager providerManager = new ProviderManager(authenticationProvider);
         return providerManager;
     }
-
-//    @Autowired
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.authenticationProvider(authenticationProvider());
-//    }
-
-//    @Bean
-//public InMemoryUserDetailsManager userDetailsService() {
-//    PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-//    UserDetails user = User.withUsername("user1")
-//            .password(encoder.encode("1234"))
-//            .authorities("USER")
-//            .build();
-//    UserDetails admin = User.withUsername("admin1")
-//            .password(encoder.encode("1234"))
-//            .authorities("ADMIN")
-//            .build();
-//    return new InMemoryUserDetailsManager(user,admin);
-//}
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
                 .authorizeHttpRequests(requests->requests
-                    .requestMatchers("/","/reset_password","/signin","/logout","/home","rooms","/signup","/css/**","/img/**","/fonts/**","/js/**","/about","/contact","/forgotpass","coinpayments-ipn","/get-session").permitAll()
+                    .requestMatchers("/","/reset_password","/signin","/logout","/home","rooms","/signup","/css/**","/img/**","/fonts/**","/js/**","/about","/contact","/forgotpass","coinpayments-ipn","/get-session","/proceedToPayment").permitAll()
                     .requestMatchers("/admin").hasAuthority("ADMIN")
 
                     .requestMatchers("/userinfo").hasAnyAuthority("ADMIN","USER")

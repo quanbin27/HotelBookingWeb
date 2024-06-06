@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class BookingController {
         this.userDetailsService = userDetailsService;
         this.loaiPhongService = loaiPhongService;
     }
+
     @GetMapping("booking")
     public String booking(Model model, HttpSession session){
              Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -53,13 +55,20 @@ public class BookingController {
                 bookingInfo.setTrangThai("New");
                 bookingInfo.setKhachHang(taiKhoan.getKhachHang());
                 session.setAttribute("bookingInfo",bookingInfo);
-
              }
              List<LoaiPhong> loaiPhongs = loaiPhongService.findAll();
              model.addAttribute("loaiphongs",loaiPhongs);
              model.addAttribute("checkinDate", bookingInfo.getNgayBD());
              model.addAttribute("checkoutDate", bookingInfo.getNgayTra());
              return "booking";
+    }
+    @PostMapping("cancelbooking")
+    public String cancelbooking(HttpSession session){
+        session.removeAttribute("bookingInfo");
+        session.removeAttribute("checkInDate");
+        session.removeAttribute("checkOutDate");
+        session.removeAttribute("selectedRoomType");
+        return "redirect:/booking";
     }
     @PostMapping("/showHangPhong")
     public String showRoomCategories(@RequestParam("roomType") String roomType,
@@ -73,6 +82,7 @@ public class BookingController {
         session.setAttribute("selectedRoomType", roomType);
         session.setAttribute("checkInDate", checkInDate);
         session.setAttribute("checkOutDate", checkOutDate);
+        String errorMessage = null;
         // Lấy thông tin phiếu đặt từ session
         PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -81,15 +91,23 @@ public class BookingController {
             Date checkIn = dateFormat.parse(checkInDate);
             Date checkOut = dateFormat.parse(checkOutDate);
             Date today= new Date();
-            // In ra màn hình kiểm tra
-            bookingInfo.setNgayBD(checkIn);
-            bookingInfo.setNgayTra(checkOut);
-            bookingInfo.setNgayDat(today);
+
+            if (!checkOut.after(checkIn)) {
+                errorMessage = "Ngày check-out không được bé hơn ngày check-in. Vui lòng chọn lại ngày.";
+            } else {
+                bookingInfo.setNgayBD(checkIn);
+                bookingInfo.setNgayTra(checkOut);
+                bookingInfo.setNgayDat(today);
+            }
+
         } catch (ParseException e) {
             System.out.println("Định dạng ngày không hợp lệ!");
             e.printStackTrace();
         }
-
+        if (errorMessage != null) {
+            model.addAttribute("errorMessage", errorMessage);
+            return "booking"; // trả về trang hiển thị lỗi
+        }
         // Tạo một Map để lưu số lượng đã đặt của từng hạng phòng
         Map<String, Integer> soLuongDaDatMap = new HashMap<>();
         Map<String,Integer> soLuongPhongTrong= new HashMap<>();
@@ -131,7 +149,6 @@ public class BookingController {
         // Lấy thông tin phiếu đặt từ session
         PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
         System.out.println(bookingInfo.getMaPD()+bookingInfo.getTrangThai());
-        double tongtien=bookingInfo.getTongTien();
 
         // Lặp qua danh sách các hạng phòng và số lượng đã chọn
         for (int i = 0; i < hangPhongIds.size(); i++) {
@@ -159,11 +176,10 @@ public class BookingController {
                 chiTietPhieuDat.setPhieudat(bookingInfo);
                 bookingInfo.getChitietphieudats().add(chiTietPhieuDat);
             }
-            tongtien=tongtien+quantity*selectedRoom.getDonGia();
         }
-        bookingInfo.setTongTien(tongtien);
+        bookingInfo.setTongTien(bookingInfo.calculateTongTien());
         System.out.println(bookingInfo.getChitietphieudats()+"<-CTPD");
-        phieuDatService.save(bookingInfo);
+//        phieuDatService.save(bookingInfo);
         // Lưu thông tin phiếu đặt đã cập nhật vào session
         session.setAttribute("bookingInfo", bookingInfo);
 
@@ -188,6 +204,21 @@ public class BookingController {
         model.addAttribute("bookingInfo",bookingInfo);
         return "booking-info-success";
     }
+    @PostMapping("/startPay")
+    public String startPay(HttpSession session) {
+        PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
+        phieuDatService.save(bookingInfo);
+        return "redirect:/proceedToPayment";
+    }
+
+    @GetMapping("/proceedToPayment")
+    public String proceedToPayment(HttpSession session, Model model) {
+        PhieuDat bookingInfo = (PhieuDat) session.getAttribute("bookingInfo");
+        model.addAttribute("bookingInfo", bookingInfo);
+        return "processpayment";
+    }
+
+
     @GetMapping("/booking-info-success")
     public String showBookingInfoSuccess(HttpSession session, Model model) {
         // Lấy thông tin phiếu đặt từ session
@@ -278,9 +309,13 @@ public class BookingController {
             if ("simple".equals(ipnType)) {
                 String status = dataMap.get("status");
                 String maPd= dataMap.get("item_name");
+                System.out.println("Toi day"+maPd);
                 Optional<PhieuDat> pd=phieuDatService.findById(maPd);
+                System.out.println("TOi day 1");
                 PhieuDat phieuDat=pd.get();
+                System.out.println(phieuDat.getMaPD());
                 if (status.equals("0")) {
+                    System.out.printf("Da khoi tao pd");
                     phieuDat.setTrangThai("Waiting for buyer funds");
                     phieuDatService.save(phieuDat);
                 }

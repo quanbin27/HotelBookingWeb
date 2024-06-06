@@ -43,19 +43,20 @@
                             <nav>
                                 <ul id="navigation">
                                     <li><a href="/home">home</a></li>
-                                    <li><a href="/rooms">rooms</a></li>
+                                    <li><a class="active" href="rooms">rooms</a></li>
                                     <li><a href="/about">About</a></li>
                                     <li><a href="/contact">Contact</a></li>
-
-
                                     <div class="nav-links" style="text-align: center;">
                                         <li>
                                             <a href="#" class="desktop-item" >Menu</a>
                                             <ul class="drop-menu" style="left: 2%;font-size: 6px;color: #f2f2f2;">
 
-                                                <li><a th:href="@{/profile}">Profile</a></li>
-                                                <li><a th:href="@{/bookinghistory}">Booking History</a></li>
-                                                <li><a th:href="@{/logout}">Log out</a></li>
+                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Profile</a>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/profile}">Profile</a></li>
+                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signin}">Booking History</a>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/bookinghistory}">Booking History</a></li>
+                                                <li><a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>
+                                                    <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Log out</a></li>
                                             </ul>
                                         </li>
                                     </div>
@@ -71,12 +72,10 @@
                         </div>
                     </div>
                     <div class="col-xl-5 col-lg-4 d-none d-lg-block">
-
                         <!--                            <div class="sign_up" style="text-align: right;">-->
                         <!--                                -->
                         <!--                                <div class="sign_btn d-none d-lg-block">-->
-                        <!--                                    <a th:if="${isLoggedIn == false}" th:href="@{/signup}">Sign Up</a>-->
-                        <!--                                    <a th:if="${isLoggedIn == true}" th:href="@{/logout}">Đăng xuất</a>-->
+                        <!--                                    <a href="/signup">Sign Up</a>-->
                         <!--                                </div>-->
                         <!--                            </div>-->
                     </div>
@@ -91,53 +90,27 @@
 <!-- header-end -->
 
 <!-- bradcam_area_start -->
-<div class="bradcam_area breadcam_bg_2" style="padding: 145px 0 20px">
-    <h3>Booking History</h3>
+<div class="bradcam_area breadcam_bg_1">
+    <h3>Proceed Payment</h3>
 </div>
 <!-- bradcam_area_end -->
-<div class="content">
-    <div class="container">
-        <div class="table-responsive">
-            <table class="table table-striped custom-table">
-                <thead>
-                <tr>
-                    <th scope="col">Mã PD</th>
-                    <th scope="col">Ngày Đặt</th>
-                    <th scope="col">Ngày Nhận Phòng</th>
-                    <th scope="col">Ngày Trả Phòng</th>
-                    <th scope="col">Trạng Thái</th>
-                    <th scope="col"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr scope="row" th:each="phieuDat : ${listphieudat}">
-                    <form action="/booking-info" method="post">
-                        <input type="hidden" name="maPD" th:value="${phieuDat.getMaPD()}">
-                        <td th:text="${phieuDat.getMaPD()}"></td>
-                        <td th:text="${phieuDat.getNgayDat()}"></td>
-                        <td th:text="${phieuDat.getNgayBD()}"></td>
-                        <td th:text="${phieuDat.getNgayTra()}"></td>
-                        <td th:text="${phieuDat.getTrangThai()}"></td>
-                        <td><button type="submit" >Chi tiết</button></td> 
-                    </form>
+<!-- offers_area_start -->
 
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="text-right mt-4">
-            <label class="text-muted font-weight-normal m-0">Tổng số ngày:</label>
-            <div class="text-large"><strong th:text="${tongsongay}"></strong></div>
-        </div>
-        <div class="text-right mt-4">
-            <label class="text-muted font-weight-normal m-0">Tổng số tiền:</label>
-            <div class="text-large"><strong th:text="${#numbers.formatDecimal(tongtiendatra,0,'COMMA',0,'POINT')}+'VND'"></strong></div>
-        </div>
-
-    </div>
-
-</div>
-
+<!-- instragram_area_end -->
+<form id="paymentForm" action="https://www.coinpayments.net/index.php" method="post">
+    <input type="hidden" name="cmd" value="_pay_simple">
+    <input type="hidden" name="reset" value="1">
+    <input type="hidden" name="merchant" value="d38af4bb3e25d61522280a5de92f92e4">
+    <input type="hidden" name="item_name" th:value="${bookingInfo.getMaPD()}">
+    <input type="hidden" name="currency" value="VND">
+    <input type="hidden" name="amountf" th:value="${bookingInfo.getTongTien()}">
+    <input type="hidden" name="allow_currencies" value="BTC,LTC,XRP,TRX,USDC,ETC,USDT.TRC20,LTCT,BNB.BSC">
+    <input type="hidden" name="cancel_url" value="http://localhost:8383/booking-info">
+    <input type="hidden" name="success_url" value="http://localhost:8383/booking-info-success">
+</form>
+<script>
+    document.getElementById('paymentForm').submit();
+</script>
 <!-- footer -->
 <footer class="footer">
     <div class="footer_top">
@@ -223,9 +196,10 @@
         </div>
     </div>
 </footer>
-<!-- footer_end -->
 
+<!-- form itself end-->
 
+<!-- form itself end -->
 
 
 <!-- JS here -->
@@ -259,17 +233,18 @@
     $('#datepicker').datepicker({
         iconsLibrary: 'fontawesome',
         icons: {
-            rightIcon: '<span class="fa fa-caret-down"></span>'
-        }
+         rightIcon: '<span class="fa fa-caret-down"></span>'
+     }
     });
     $('#datepicker2').datepicker({
         iconsLibrary: 'fontawesome',
         icons: {
-            rightIcon: '<span class="fa fa-caret-down"></span>'
-        }
+         rightIcon: '<span class="fa fa-caret-down"></span>'
+     }
 
     });
 </script>
+
 
 
 </body>

@@ -67,6 +67,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         UserDetails userDetails=(UserDetails) new User(taiKhoan.getUsername(),taiKhoan.getEncrytedPassword(),grantedAuthorityList);
         return userDetails;
     }
+    public boolean userExistsCCCD(String CCCD ){
+        return taiKhoanRepository.existsByCCCD(CCCD);
+    }
 
     public boolean userExists(String Username ){
         return taiKhoanRepository.existsByUsername(Username);
@@ -75,7 +78,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public void save(TaiKhoan taiKhoan, KhachHang khachHang){
         khachHangRepository.save(khachHang);
         taiKhoanRepository.save(taiKhoan);
-
     }
     @Transactional
     public void addNewUser(UserRole userRole){
@@ -98,16 +100,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         tk.setUsername(taiKhoanKhachHangDTO.getUsername());
         tk.setEncrytedPassword(taiKhoanKhachHangDTO.getEncrytedPassword());
         tk.setEnabled(false);
-        System.out.println("here2" );
         tk.setKhachHang(kh);
         save(tk,kh);
         UserRole userRole=new UserRole();
         userRole.setTaiKhoan(tk);
         addNewUser(userRole);
-        System.out.println("here4" );
-        System.out.println("toiday");
-        System.out.println("here3" );
-
         System.out.println("da save");
     }
     public void updateResetPasswordToken(String token, String username) throws UsernameNotFoundException{
