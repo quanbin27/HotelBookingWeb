@@ -1,13 +1,18 @@
 package com.example.demo.controller;
 
+import cn.apiclub.captcha.Captcha;
 import com.example.demo.DTO.TaiKhoanKhachHangDTO;
 import com.example.demo.entity.KhachHang;
 import com.example.demo.entity.TaiKhoan;
 import com.example.demo.service.impl.UserDetailsServiceImpl;
+import com.example.demo.utils.CaptchaUtil;
 import com.example.demo.utils.RandomStringUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +33,12 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 
 import static com.example.demo.utils.EncrytedPasswordUtils.encrytePassword;
@@ -55,13 +64,37 @@ public class AccountController {
 
     }
     @GetMapping("signup")
-    public  String signup(@ModelAttribute TaiKhoanKhachHangDTO taiKhoanKhachHangDTO, Model model){
-        model.addAttribute("taiKhoanKhachHangDTO",taiKhoanKhachHangDTO);
+    public String signup(@ModelAttribute TaiKhoanKhachHangDTO taiKhoanKhachHangDTO,Model model, HttpSession session) {
+        // Tạo Captcha
+        Captcha captcha = CaptchaUtil.createCaptcha(200, 50);
+
+        // Lưu Captcha vào Session
+        CaptchaUtil.setCaptcha(session, captcha);
+        model.addAttribute("taiKhoanKhachHangDTO", taiKhoanKhachHangDTO);
+
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(captcha.getImage(), "png", outputStream);
+            String captchaBase64 = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+
+            // Truyền Captcha qua Model để sử dụng trong HTML
+            model.addAttribute("captcha", captchaBase64);
+        } catch (IOException e) {
+            e.printStackTrace(); // Xử lý ngoại lệ
+            model.addAttribute("captchaError", "Unable to generate captcha. Please try again later.");
+        }
+
         return "sign_up";
     }
+
     @PostMapping("signup")
-    public String returnHome(@Valid TaiKhoanKhachHangDTO taiKhoanKhachHangDTO, BindingResult bindingResult){
+    public String returnHome(@RequestParam("userCaptcha") String userCaptcha, HttpSession session,@Valid TaiKhoanKhachHangDTO taiKhoanKhachHangDTO, BindingResult bindingResult,Model model){
         System.out.println(taiKhoanKhachHangDTO.toString());
+        String captchaAnswer = CaptchaUtil.getCaptchaCode(session);
+        if (!captchaAnswer.equals(userCaptcha)) {
+            System.out.println("captcha sai");
+            bindingResult.addError(new FieldError("taiKhoanKhachHangDTO", "userCaptcha", "Captcha không chính xác"));
+        }
         if (userDetailsService.userExists(taiKhoanKhachHangDTO.getUsername())) {
             bindingResult.addError(new FieldError("taiKhoanKhachHangDTO","Username","Username already in use"));
         }
@@ -69,6 +102,19 @@ public class AccountController {
             bindingResult.addError(new FieldError("taiKhoanKhachHangDTO","CCCD","CCCD already in use"));
         }
         if (bindingResult.hasErrors()){
+            Captcha captcha = CaptchaUtil.createCaptcha(200, 50);
+            CaptchaUtil.setCaptcha(session, captcha);
+
+            // Chuyển đổi BufferedImage sang mảng byte
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try {
+                ImageIO.write(CaptchaUtil.getCaptchaImage(session), "png", baos);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String captchaImage = Base64.getEncoder().encodeToString(baos.toByteArray());
+            model.addAttribute("captcha", captchaImage);
+            model.addAttribute("taiKhoanKhachHangDTO", taiKhoanKhachHangDTO);
             return "sign_up";
         }
         taiKhoanKhachHangDTO.setEncrytedPassword(encrytePassword(taiKhoanKhachHangDTO.getEncrytedPassword()));

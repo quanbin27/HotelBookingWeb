@@ -94,7 +94,12 @@
 		    <groupId>org.apache.tomcat.embed</groupId>
 		    <artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/cn.apiclub.tool/simplecaptcha -->
+		<dependency>
+			<groupId>cn.apiclub.tool</groupId>
+			<artifactId>simplecaptcha</artifactId>
+			<version>1.2.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>

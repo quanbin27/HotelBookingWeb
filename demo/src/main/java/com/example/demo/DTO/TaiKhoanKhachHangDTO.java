@@ -45,6 +45,7 @@ public class TaiKhoanKhachHangDTO implements Serializable {
     private String Email;
     private String MaSoThue;
     private boolean Enabled;
+    private String userCaptcha;
     public void loadFromEntity(KhachHang khachHang, TaiKhoan taiKhoan){
         this.Username=taiKhoan.getUsername();
         this.EncrytedPassword=taiKhoan.getEncrytedPassword();

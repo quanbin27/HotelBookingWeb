@@ -84,6 +84,9 @@
         <div class="container" style="padding: 20px;background: white;max-height: 900px;margin: auto;">
             <div class="row">
                 <div class="col-xl-12 col-lg-12" style="">
+                    <div th:if="${successMessage}" style="color: green;">
+                        <p th:text="${successMessage}"></p>
+                    </div>
                     <form name="signin" th:action="@{/j_spring_security_check}" method="post" style="display: flex;text-align:center;justify-content: center;align-items: center;">
                         <div style="display: block;padding: 3%;width: 50%;justify-content: center;">
                             <h3 style="margin: 0;text-transform: uppercase;font-size: 25px;text-align: center;margin-bottom: 28px;">SIGN IN</h3>
@@ -91,7 +94,6 @@
                                 <input name="username" type="text" placeholder="Ten dang nhap" class="form-control">
                                 <i class="zmdi zmdi-account">*</i>
                             </div>
-                            
                             <div class="form-wrapper">
                                 <input name="password" type="password" placeholder="Mat khau" class="form-control">
                                 <i class="zmdi zmdi-lock">*</i>

@@ -147,6 +147,12 @@
                                 <input type="text" placeholder="Ma so thue " class="form-control" name="MaSoThue" th:value="*{MaSoThue}" >
                                 <i class="zmdi zmdi-account">optional</i>
                             </div>
+                            <div class="form-wrapper" >
+                                <img th:src="'data:image/png;base64,' + ${captcha}" alt="Captcha image"/>
+                                <input type="text" placeholder="Captcha " class="form-control" name="userCaptcha" th:errorClass="is-invalid" required >
+                                <i class="zmdi zmdi-account">*</i>
+                                <div th:if="${#fields.hasErrors('userCaptcha')}" th:errors="*{userCaptcha}" class="invalid-feedback"> </div>
+                            </div>
                         </div>
 
 

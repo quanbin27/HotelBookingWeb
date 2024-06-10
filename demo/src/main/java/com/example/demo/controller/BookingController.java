@@ -202,6 +202,7 @@ public class BookingController {
         Optional<PhieuDat> pd=phieuDatService.findById(maPD);
         PhieuDat bookingInfo = pd.get();
         model.addAttribute("bookingInfo",bookingInfo);
+        System.out.println(bookingInfo.getMaPD()+"mapd----");
         return "booking-info-success";
     }
     @PostMapping("/startPay")
