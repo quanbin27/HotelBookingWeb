@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="../../img/logo/logo.png" rel="icon">
+  <title>Thêm món ăn</title>
+  <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="../../css/ruang-admin.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+        <div class="sidebar-brand-icon">
+          <img src="../../img/logo/logo2.png">
+        </div>
+        <div class="sidebar-brand-text mx-3">Admin</div>
+      </a>
+      <hr class="sidebar-divider my-0">
+      <li class="nav-item">
+        <a class="nav-link" href="">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Thống kê</span></a>
+      </li>
+      <hr class="sidebar-divider">
+      <div class="sidebar-heading">
+        Quản lý
+      </div>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable1" aria-expanded="true"
+          aria-controls="collapseTable">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Người dùng</span>
+        </a>
+        <div id="collapseTable1" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Thao tác</h6>
+            <a class="collapse-item" href="../users/list-user.html">Danh sách</a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable2" aria-expanded="true"
+          aria-controls="collapseTable">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Danh mục</span>
+        </a>
+        <div id="collapseTable2" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Thao tác</h6>
+            <a class="collapse-item" href="../categories/list-category.html">Danh sách</a>
+            <a class="collapse-item" href="../categories/add-category.html">Thêm</a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable3" aria-expanded="true"
+          aria-controls="collapseTable">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Món ăn</span>
+        </a>
+        <div id="collapseTable3" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Thao tác</h6>
+            <a class="collapse-item" href="./list-product.html">Danh sách</a>
+            <a class="collapse-item" href="./add-product.html">Thêm</a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable4" aria-expanded="true"
+          aria-controls="collapseTable">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Đơn hàng</span>
+        </a>
+        <div id="collapseTable4" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Thao tác</h6>
+            <a class="collapse-item" href="../orders/list-order.html">Danh sách</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <!-- Sidebar -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        <!-- TopBar -->
+        <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
+          <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <img class="img-profile rounded-circle" src="../../img/girl.png" style="max-width: 60px">
+                <span class="ml-2 d-none d-lg-inline text-white small">Thanh Thảo</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Hồ sơ
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Cài đặt
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Lịch hoạt động
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Đăng xuất
+                </a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <!-- Topbar -->
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Thêm món ăn</h1>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="./">Trang chủ</a></li>
+              <li class="breadcrumb-item">Món Ăn</li>
+              <li class="breadcrumb-item active" aria-current="page">Thêm món ăn</li>
+            </ol>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-12">
+              <!-- Form Basic -->
+              <div class="card mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Thêm món ăn</h6>
+                </div>
+                <div class="card-body">
+                  <form action="" method="">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Tên món ăn</label>
+                      <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                        placeholder="Nhập tên món ăn">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Hình ảnh</label>
+                        <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Giá</label>
+                        <input type="quantity" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                          placeholder="Nhập giá">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Mô tả</label>
+                        <textarea name="" placeholder="Nhập mô tả" id="" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Danh mục</label>
+                        <select name="" id="" class="form-control">
+                            <option value="">Cơm</option>
+                            <option value="">Mì</option>
+                            <option value="">Bánh Canh</option>
+                            <option value="">Hủ Tiếu</option>
+                            <option value="">Nui</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          <!-- Modal Logout -->
+          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Bạn có chắc muốn đăng xuất?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Hủy</button>
+                  <a href="login.html" class="btn btn-primary">Đăng xuất</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+          <!--Row-->
+
+          <!-- Modal Logout -->
+          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Bạn có chắc muốn đăng xuất?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Hủy</button>
+                  <a href="#" class="btn btn-primary">Đăng xuất</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!---Container Fluid-->
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Scroll to top -->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <script src="../../vendor/jquery/jquery.min.js"></script>
+  <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="../../js/ruang-admin.min.js"></script>
+
+</body>
+
+</html>

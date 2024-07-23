@@ -4,6 +4,7 @@ import com.example.demo.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -45,7 +46,6 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests->requests
                     .requestMatchers("/","/reset_password","/signin","/logout","/home","rooms","/signup","/css/**","/img/**","/fonts/**","/js/**","/about","/contact","/forgotpass","coinpayments-ipn","/get-session","/proceedToPayment").permitAll()
                     .requestMatchers("/admin").hasAuthority("ADMIN")
-
                     .requestMatchers("/userinfo").hasAnyAuthority("ADMIN","USER")
                     .anyRequest().authenticated()
 
