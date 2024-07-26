@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +16,7 @@ public class LoaiPhong implements Serializable {
     private String MaLP;
     private String TenLP;
     private String MoTa;
-    @OneToMany(mappedBy = "loaiphong", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "loaiphong", cascade = CascadeType.MERGE)
     private Set<HangPhong> hangphongs;
 
 }

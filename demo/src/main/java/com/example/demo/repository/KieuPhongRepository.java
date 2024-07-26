@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface KieuPhongRepository extends JpaRepository<KieuPhong,String> {
-    List<KieuPhong> findAll();
+
 }

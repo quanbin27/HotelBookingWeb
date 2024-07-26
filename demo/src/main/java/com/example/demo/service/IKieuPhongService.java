@@ -6,19 +6,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IKieuPhongService {
+
+    KieuPhong createKieuPhong(KieuPhong kieuPhong);
+
     List<KieuPhong> findAll();
 
-    List<KieuPhong> findAllById(Iterable<String> strings);
-
-    <S extends KieuPhong> S save(S entity);
-
-    Optional<KieuPhong> findById(String s);
-
-    long count();
+    KieuPhong findById(String s);
 
     void deleteById(String s);
 
-    void delete(KieuPhong entity);
-
-    void deleteAll();
+    KieuPhong updateKieuPhong(String s, KieuPhong kieuPhongDetails);
 }

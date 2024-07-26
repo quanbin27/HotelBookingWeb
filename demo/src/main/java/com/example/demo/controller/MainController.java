@@ -10,8 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +32,7 @@ public class MainController {
     public String home(Model model) {
         return "index";
     }
-    @RequestMapping("admin")
-    public String admin(Model model){
-        return "admin";
-    }
+
 
     @RequestMapping("contact")
     public String contact(){
@@ -53,4 +49,6 @@ public class MainController {
         model.addAttribute("listkieuphong",kieuphongs);
         return "rooms";
     }
+
+
 }

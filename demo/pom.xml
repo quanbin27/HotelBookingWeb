@@ -34,12 +34,12 @@
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
-			<version>4.9.1</version> <!-- Thay đổi phiên bản tùy thuộc vào phiên bản mong muốn -->
+			<version>4.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20210307</version> <!-- Thay đổi version tùy theo phiên bản mong muốn -->
+			<version>20210307</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>

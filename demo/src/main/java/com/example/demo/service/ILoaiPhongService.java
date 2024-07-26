@@ -7,21 +7,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ILoaiPhongService {
+
+    LoaiPhong createLoaiPhong(LoaiPhong loaiPhong);
+
     List<LoaiPhong> findAll();
 
-    List<LoaiPhong> findAllById(Iterable<String> strings);
-
-    <S extends LoaiPhong> S save(S entity);
-
-    Optional<LoaiPhong> findById(String s);
-
-    long count();
+    LoaiPhong findById(String s);
 
     void deleteById(String s);
 
-    void delete(LoaiPhong entity);
-
-    void deleteAll();
-
-    List<LoaiPhong> findAll(Sort sort);
+    LoaiPhong updateLoaiPhong(String s, LoaiPhong loaiPhongDetails);
 }
